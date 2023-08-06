@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux"
+import { Sidebar, Topbar } from "./components"
 import Home from "./pages/Home"
 
 const App = () => {
@@ -7,7 +8,12 @@ const App = () => {
 
     return (
         <div>
-            <Home />
+            <Topbar />
+
+            <div className="flex">
+                <Sidebar />
+                <Home />
+            </div>
         </div>
     )
 }

@@ -10,3 +10,19 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <App />
     </Provider>
 )
+
+/*
+
+
+
+Task model
+ - title
+ - sche date
+ - desc
+ - project
+ - prioirty
+ - labels
+
+
+
+*/
