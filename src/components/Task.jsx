@@ -19,9 +19,19 @@ const Task = ({
         completedSubtasksCount,
         nonCompletedSubtasksCount,
         subtasks,
+        priority,
     },
 }) => {
     const dispatch = useDispatch()
+
+    const priorityClass = {
+        1: "text-red-500",
+        2: "text-yellow-700",
+        3: "text-blue-600",
+        4: "text-white-400",
+    }
+
+    const priorityClassName = priorityClass[priority] || "white"
 
     const markComplete = () => {
         dispatch(completeTask({ id: _id }))
@@ -55,7 +65,7 @@ const Task = ({
                         type="checkbox"
                         name="asdsa"
                         id="asdas"
-                        className="w-4 h-4 rounded-full bg-transparent border-gray-600 outline-none focus:ring-0"
+                        className={`w-4 h-4 rounded-full bg-transparent `}
                         onChange={markComplete}
                     />
 
