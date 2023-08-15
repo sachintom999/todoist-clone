@@ -18,14 +18,13 @@ const TaskDetail = () => {
         taskDetailModalContents
 
     const priorityClass = {
-        1: "text-red-400",
-        2: "text-yellow-400",
-        3: "text-blue-400",
+        1: "text-red-500",
+        2: "text-yellow-700",
+        3: "text-blue-600",
         4: "text-white-400",
     }
 
     const priorityClassName = priorityClass[priority] || "white"
-    console.log("priorityClassName", priorityClassName)
 
     return (
         <div className="absolute top-22 left-42 text-white w-2/3 h-2/3 bg-gray-900 rounded-md">
@@ -96,9 +95,10 @@ const TaskDetail = () => {
 
                     <p className="text-gray-300 py-3">Priority</p>
                     <p className="text-xs">
-                        P{priority} <BsFlagFill className={priorityClassName} />
+                        <BsFlagFill className={`${priorityClassName} inline`} />
+                        <span className="ml-2">P{priority}</span>
                     </p>
-                    <hr className="border text-gray-50" />
+                    <hr className="border text-gray-50 mt-3" />
 
                     <p className="text-gray-300 py-3">Labels</p>
 
