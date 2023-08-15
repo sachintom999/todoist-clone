@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { AiFillPlusCircle, AiOutlinePlus } from "react-icons/ai"
-import { useDispatch } from "react-redux"
-import { openAddTaskForm } from "../redux/tasks"
-
-const AddTaskButton = () => {
+import { useDispatch, useSelector } from "react-redux"
+import { decrement, increment, reset } from "../redux/tasks"
+const AddTaskButton = ({ formOpen, setFormOpen }) => {
     const [isHovered, setIsHovered] = useState(false)
+
+    const { noOfOpenForms } = useSelector(state => state.tasks)
 
     const dispatch = useDispatch()
 
@@ -34,7 +35,11 @@ const AddTaskButton = () => {
                 setIsHovered(false)
             }}
             onClick={() => {
-                dispatch(openAddTaskForm())
+                // dispatch(decrement())
+                dispatch(increment())
+                setFormOpen(true)
+
+                setIsHovered(false)
             }}
         >
             {plusIcon(true)}

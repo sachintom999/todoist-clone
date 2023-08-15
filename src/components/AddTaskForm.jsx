@@ -1,18 +1,25 @@
+import { useState } from "react"
 import { AiOutlineClose, AiOutlineTag } from "react-icons/ai"
 import { BsCalendar3, BsFlag } from "react-icons/bs"
 import { IoMdSend } from "react-icons/io"
 import { MdOutlineMoreHoriz } from "react-icons/md"
-import { useDispatch } from "react-redux"
-import { closeAddTaskForm } from "../redux/tasks"
+import { useDispatch, useSelector } from "react-redux"
+import { createTask, decrement } from "../redux/tasks"
 
-const AddTaskForm = () => {
+const AddTaskForm = ({ formOpen, setFormOpen }) => {
+    const { anyFormOpen } = useSelector(state => state.tasks)
+
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
+
     const dispatch = useDispatch()
     const handleSubmit = e => {
         e.preventDefault()
-        console.log("11")
+        console.log("form submit", { title, description })
+        dispatch(createTask({ title, description }))
     }
 
-    return (
+    return anyFormOpen && formOpen ? (
         <form
             className="flex flex-col bg-dark1  border rounded-md border-gray-600 mt-4"
             onSubmit={handleSubmit}
@@ -24,10 +31,18 @@ const AddTaskForm = () => {
                     id=""
                     placeholder="Task name"
                     className="bg-transparent outline-none border-none text-sm"
+                    value={title}
+                    onChange={e => {
+                        setTitle(e.target.value)
+                    }}
                 />
                 <textarea
                     placeholder="Description"
                     className="bg-transparent outline-none border-none text-xs mt-3"
+                    value={description}
+                    onChange={e => {
+                        setDescription(e.target.value)
+                    }}
                 ></textarea>
 
                 <div className="flex gap-2 mt-3">
@@ -57,7 +72,8 @@ const AddTaskForm = () => {
                     <div
                         className="p-2 bg-gray-500 opacity-30 rounded-sm cursor-pointer"
                         onClick={() => {
-                            dispatch(closeAddTaskForm())
+                            dispatch(decrement())
+                            setFormOpen(false)
                         }}
                     >
                         <AiOutlineClose fontSize={18} />
@@ -68,7 +84,7 @@ const AddTaskForm = () => {
                 </div>
             </div>
         </form>
-    )
+    ) : null
 }
 
 export default AddTaskForm

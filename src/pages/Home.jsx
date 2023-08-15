@@ -1,23 +1,27 @@
-import {
-    Navigate,
-    Route,
-    BrowserRouter as Router,
-    Routes,
-} from "react-router-dom"
-import { Filters, Inbox, Main, Today, Upcoming } from "../components"
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
+import { Navigate, Route, Routes } from "react-router-dom"
+import { Filters, Inbox, Main, Upcoming } from "../components"
 
 const Home = () => {
+    const { taskList } = useSelector(state => state.tasks)
+
+    // useEffect(() => {}, [])
+
     return (
         <div>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/today" />} />
-                    <Route path="/today" element={<Main title="Today" />} />
-                    <Route path="/inbox" element={<Inbox />} />
-                    <Route path="/upcoming" element={<Upcoming />} />
-                    <Route path="/filters" element={<Filters />} />
-                </Routes>
-            </Router>
+            {/* <Router> */}
+            <Routes>
+                <Route path="/" element={<Navigate to="/today" />} />
+                <Route
+                    path="/today"
+                    element={<Main title="Today" taskList={taskList} />}
+                />
+                <Route path="/inbox" element={<Inbox />} />
+                <Route path="/upcoming" element={<Upcoming />} />
+                <Route path="/filters-labels" element={<Filters />} />
+            </Routes>
+            {/* </Router> */}
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import { AiOutlineBell, AiOutlineMenu, AiOutlinePlus } from "react-icons/ai"
 import { BiSolidUserCircle } from "react-icons/bi"
 import { BsCheckCircle, BsQuestionCircle } from "react-icons/bs"
+import { FaStar } from "react-icons/fa"
 
 import { GoSearch } from "react-icons/go"
 import { GrHomeRounded } from "react-icons/gr"
@@ -17,7 +18,10 @@ const Topbar = () => {
             </div>
 
             <div className="flex justify-around">
-                <button>⭐️ Upgrade to Pro</button>
+                <button className="flex">
+                    <FaStar className="text-yellow-500" fontSize={15} />
+                    <span>Upgrade to Pro</span>
+                </button>
                 <AiOutlinePlus fontSize={20} />
                 <BsCheckCircle fontSize={20} />
                 <span>8/5</span>
