@@ -1,17 +1,22 @@
 import { useEffect } from "react"
 import { AiOutlinePlus } from "react-icons/ai"
-import { BsFlagFill } from "react-icons/bs"
-import { MdOutlineKeyboardArrowDown } from "react-icons/md"
+
 import { useDispatch } from "react-redux"
-import { closeTaskDetailForm, updateTask } from "../redux/tasks"
+import {
+    closeTaskDetailForm,
+    updateTask,
+    updatetaskDetailModalState,
+} from "../redux/tasks"
 import { useSelector } from "react-redux"
 import Comment from "./Comment"
 import Subtask from "./Subtask"
 import { useState, useRef } from "react"
 import PriorityModal from "./PriorityModal"
-import Label from "./Label"
+
 import LabelModal from "./LabelModal"
 import { getPriorityColor } from "../config/helpers"
+import LabelContainer from "./LabelContainer"
+import PriorityContainer from "./PriorityContainer"
 const TaskDetail = () => {
     const modalRef = useRef(null)
     // console.log("modalRef.current", modalRef.current)
@@ -53,11 +58,19 @@ const TaskDetail = () => {
     const [updatedDesc, setUpdatedDesc] = useState(desc)
 
     useEffect(() => {
+        dispatch(updatetaskDetailModalState({ labels }))
+
         const closeModalOnOutsideClick = e => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
                 setShowPriorityModal(false)
                 setShowLabelModal(false)
-                dispatch(updateTask({ id: _id, labels: ["wip", "qwe"] }))
+                dispatch(
+                    updateTask({
+                        id: _id,
+                        // labels: taskDetailModalContents.labels,
+                        labels: ["qqq", "www"],
+                    })
+                )
 
                 // dispatch()
             }
@@ -110,7 +123,7 @@ const TaskDetail = () => {
                             priority
                         )}   ${showForm ? "opacity-60" : ""} `}
                         onChange={() => {}}
-                        disabled={showForm ? "disabld" : ""}
+                        disabled={showForm ? "disabled" : ""}
                     />
                     {!showForm && (
                         <div
@@ -252,46 +265,16 @@ const TaskDetail = () => {
                     <p className="text-xs">{dueDate}</p>
                     <hr className="border text-gray-50" />
 
-                    <p className="text-gray-300 py-3">Priority</p>
-                    <p
-                        className="text-xs flex justify-between hover:bg-slate-400 p-2 rounded-md cursor-pointer"
-                        onClick={() => {
-                            setShowPriorityModal(true)
-                        }}
-                    >
-                        <span>
-                            <BsFlagFill
-                                className={`text-${getPriorityColor(
-                                    priority
-                                )} inline`}
-                            />
-                            <span className="ml-2">P{priority}</span>
-                        </span>
-                        <span>
-                            <MdOutlineKeyboardArrowDown
-                                className="inline "
-                                fontSize={15}
-                            />
-                        </span>
-                    </p>
-                    <hr className="border text-gray-50 mt-3" />
+                    <PriorityContainer
+                        setShowPriorityModal={setShowPriorityModal}
+                        priority={priority}
+                    />
 
-                    <p
-                        className="text-gray-300 py-3 flex justify-between cursor-pointer  hover:bg-slate-400"
-                        onClick={() => {
-                            setShowLabelModal(true)
-                        }}
-                    >
-                        <span>Labels</span>
-                        <span>
-                            <AiOutlinePlus className="inline mr-2 " />
-                        </span>
-                    </p>
-
-                    {labels?.map(label => {
-                        return <Label name={label} />
-                    })}
-
+                    <LabelContainer
+                        setShowLabelModal={setShowLabelModal}
+                        labels={labels}
+                        taskId={_id}
+                    />
                     <p className="text-gray-300 py-3">Reminders</p>
                     <p className="text-gray-300 py-3">Location</p>
                 </div>
