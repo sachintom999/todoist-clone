@@ -13,6 +13,7 @@ const TaskSchema = new Schema(
         labels: { type: [String], required: false },
         project: { type: String, required: true, default: "Inbox" },
         section: { type: String, required: false },
+        // user: { type: Schema.Types.ObjectId, ref: "User", required: true },
         // projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true, },
     },
     { timestamps: true }

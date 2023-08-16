@@ -19,6 +19,33 @@ export const fetchTaskDetail = createAsyncThunk(
     }
 )
 
+export const updateTask = createAsyncThunk(
+    "tasks/updateTask",
+    async payload => {
+        const { id, ...reqBody } = payload
+        console.log("reqBody", reqBody)
+        const response = await axios.patch(
+            `http://localhost:3000/api/tasks/${id}`,
+            reqBody
+        )
+
+        return response.data
+    }
+)
+
+// export const updateTask = createAsyncThunk(
+//     "tasks/updateTask",
+//     async ({ id, priority }) => {
+//         const response = await axios.patch(
+//             `http://localhost:3000/api/tasks/${id}`,
+
+//             { priority }
+//         )
+
+//         return response.data
+//     }
+// )
+
 export const tasksSlice = createSlice({
     name: "tasks",
     initialState: {
@@ -30,6 +57,10 @@ export const tasksSlice = createSlice({
         todaySections: [],
         loading: false,
         taskDetailModalContents: {},
+        labelOptions: ["option-1", "option-2"],
+        taskDetailModalState: {
+            labels: [],
+        },
     },
     reducers: {
         increment: state => {
@@ -148,12 +179,18 @@ export const tasksSlice = createSlice({
         builder.addCase(fetchTaskDetail.fulfilled, (state, action) => {
             state.taskDetailModalContents = action.payload
         })
+        builder.addCase(updateTask.fulfilled, (state, action) => {
+            const { task } = action.payload
+            state.taskDetailModalContents = {
+                ...state.taskDetailModalContents,
+                ...task,
+            }
+        })
     },
 })
 
 export const {
     increment,
-
     completeTask,
     filterTasks,
     getAllTasks,

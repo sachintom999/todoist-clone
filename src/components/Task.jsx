@@ -25,10 +25,10 @@ const Task = ({
     const dispatch = useDispatch()
 
     const priorityClass = {
-        1: "text-red-500",
-        2: "text-yellow-700",
-        3: "text-blue-600",
-        4: "text-white-400",
+        1: "border-red-700",
+        2: "border-yellow-700",
+        3: "border-blue-600",
+        4: "border-white-400",
     }
 
     const priorityClassName = priorityClass[priority] || "white"
@@ -38,11 +38,11 @@ const Task = ({
     }
 
     const options = {
-        day: "2-digit", // Day of the month, 2-digit
-        month: "short", // Month name, short
-        hour: "2-digit", // Hour, 2-digit
-        minute: "2-digit", // Minute, 2-digit
-        hour12: false, // Use 24-hour clock
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
     }
 
     const currentTime = new Date()
@@ -65,7 +65,7 @@ const Task = ({
                         type="checkbox"
                         name="asdsa"
                         id="asdas"
-                        className={`w-4 h-4 rounded-full bg-transparent `}
+                        className={`w-4 h-4 rounded-full bg-transparent border-2 ${priorityClassName}`}
                         onChange={markComplete}
                     />
 

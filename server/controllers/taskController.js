@@ -49,30 +49,29 @@ const getAllTasks = async (req, res) => {
             nonCompletedSubtasksCount: nonCompletedSubtasks.length,
         }
     })
-    console.log("tasksWithSubtaskCounts", tasksWithSubtaskCounts)
+    // console.log("tasksWithSubtaskCounts", tasksWithSubtaskCounts)
     return res.json(tasksWithSubtaskCounts)
 }
-
-// const getAllTasks = async (req, res) => {
-//     const query = req.query
-//     console.log("query", query)
-
-//     const tasks = await Task.find().sort({ createdAt: -1 })
-//     return res.json(tasks)
-// }
 
 const getSingleTask = async (req, res) => {
     const { id } = req.params
     const task = await Task.getParentTaskWithSubtasks(id)
-    console.log("task", task)
-    // const completedSubtasks = task.subtasks.filter(subtask => subtask.completed)
-    // const nonCompletedSubtasks = task.subtasks.filter(
-    //     subtask => !subtask.completed
-    // )
+    // console.log("task", task)
+
+    const subtasks = task.subtasks || []
+
+    // Calculate the number of completed and non-completed subtasks
+    const completedSubtasks = subtasks.filter(subtask => subtask.completed)
+    const nonCompletedSubtasks = subtasks.filter(subtask => !subtask.completed)
+
+    // return { ...task._doc, completedSubtasks, nonCompletedSubtasks, }
+
     if (!task) {
         return res.status(404).json({ error: "no such task" })
     }
-    return res.status(200).json(task)
+    return res
+        .status(200)
+        .json({ ...task._doc, completedSubtasks, nonCompletedSubtasks })
 }
 // const getSingleTask = async (req, res) => {
 //     const { id } = req.params
@@ -106,7 +105,11 @@ const updateTask = async (req, res) => {
         return res.status(404).json({ error: "no such task" })
     }
 
-    const task = await Task.findOneAndUpdate({ _id: id }, { ...req.body })
+    const task = await Task.findOneAndUpdate(
+        { _id: id },
+        { ...req.body },
+        { new: true }
+    )
     if (!task) {
         return res.status(404).json({ error: "no such task" })
     }
