@@ -60,6 +60,7 @@ export const tasksSlice = createSlice({
         labelOptions: ["option-1", "option-2"],
         taskDetailModalState: {
             labels: [],
+            sample: [1, 2, 3],
         },
     },
     reducers: {
@@ -71,6 +72,17 @@ export const tasksSlice = createSlice({
         },
         reset: state => {
             state.noOfOpenForms = 0
+        },
+
+        updatetaskDetailModalState: (state, action) => {
+            // console.log("action.payload", action.payload)
+            state.taskDetailModalState = {
+                ...state.taskDetailModalState,
+                ...action.payload,
+            }
+
+            // console.log("updated....")
+            // console.log(state.taskDetailModalState)
         },
 
         openAddTaskForm: state => {
@@ -191,6 +203,7 @@ export const tasksSlice = createSlice({
 
 export const {
     increment,
+    updatetaskDetailModalState,
     completeTask,
     filterTasks,
     getAllTasks,
