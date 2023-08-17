@@ -17,7 +17,8 @@ const TaskSchema = new Schema(
         },
         section: { type: Schema.Types.ObjectId, ref: "Section" },
         user: { type: Schema.Types.ObjectId, ref: "TUser" },
-        parentTask: { type: Schema.Types.ObjectId, ref: "Task" },
+        parentTask: { type: Schema.Types.ObjectId, ref: "Task", default: null },
+        favourite: { type: Boolean, required: true, default: false },
     },
     { timestamps: true }
 )
@@ -29,6 +30,11 @@ TaskSchema.statics.getParentTaskWithSubtasks = async function (parentId) {
             .populate("project")
             .populate("labels")
             .populate("section")
+            .populate("parentTask")
+            .populate({
+                path: "parentTask",
+                populate: { path: "subtasks", model: "Task" },
+            })
             // .populate("comments")
             .populate({
                 path: "comments",

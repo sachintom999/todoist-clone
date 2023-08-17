@@ -1,5 +1,7 @@
 import Comment from "./Comment"
 import CommentForm from "./CommentForm"
+import Picker from "emoji-picker-react"
+
 const CommentsContainer = ({ comments }) => {
     return (
         <>

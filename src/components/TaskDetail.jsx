@@ -1,29 +1,26 @@
-import Picker from "emoji-picker-react"
-
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import { useEffect } from "react"
-import { AiOutlinePlus } from "react-icons/ai"
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
+import { AiOutlineBranches, AiOutlinePlus } from "react-icons/ai"
+import { MdKeyboardArrowRight } from "react-icons/md"
 import { TbSection } from "react-icons/tb"
 
-import { useDispatch } from "react-redux"
+import { useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import {
     closeTaskDetailForm,
     updateTask,
     updatetaskDetailModalState,
 } from "../redux/tasks"
-import { useSelector } from "react-redux"
-import Comment from "./Comment"
-import Subtask from "./Subtask"
-import { useState, useRef } from "react"
 import PriorityModal from "./PriorityModal"
+import Subtask from "./Subtask"
 
-import LabelModal from "./LabelModal"
 import { getPriorityColor } from "../config/helpers"
-import LabelContainer from "./LabelContainer"
-import PriorityContainer from "./PriorityContainer"
-import AddTaskForm from "./AddTaskForm"
 import AddForm from "./AddForm"
 import CommentsContainer from "./CommentsContainer"
+import LabelContainer from "./LabelContainer"
+import LabelModal from "./LabelModal"
+import PriorityContainer from "./PriorityContainer"
+import ParentTask from "./ParentTask"
 const TaskDetail = () => {
     const modalRef = useRef(null)
     // console.log("modalRef.current", modalRef.current)
@@ -49,6 +46,7 @@ const TaskDetail = () => {
         nonCompletedSubtasks,
         section,
         comments,
+        parentTask,
     } = taskDetailModalContents
 
     const priorityClass = {
@@ -131,6 +129,7 @@ const TaskDetail = () => {
             </div>
             <div className="w-full flex h-full ">
                 <div className="left-section w-4/6  bg-gray-200 p-5 overflow-y-auto ">
+                    {parentTask && <ParentTask parentTask={parentTask} />}
                     <input
                         type="checkbox"
                         name="asdsa"

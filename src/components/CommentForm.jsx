@@ -1,14 +1,22 @@
+import { BsEmojiSmile, BsFillMicFill } from "react-icons/bs"
 import { ImAttachment } from "react-icons/im"
-import { BsFillMicFill, BsEmojiSmile } from "react-icons/bs"
 
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { updateTask } from "../redux/tasks"
 const CommentForm = () => {
     const [showForm, setshowForm] = useState(false)
+    const [newComment, setNewComment] = useState("")
+
+    const dispatch = useDispatch()
+    const {
+        taskDetailModalContents: { _id },
+    } = useSelector(state => state.tasks)
 
     return (
         <>
             {!showForm && (
-                <div className="h-10  px-8 flex justify-between items-center mb-10">
+                <div className="h-10  px-8 flex justify-between items-center my-10">
                     <img
                         src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg"
                         className="w-8 h-8 rounded-full"
@@ -29,13 +37,17 @@ const CommentForm = () => {
                     className="h-44 border-2 border-white  w-full p-4 rounded-md flex-col justify-end"
                     onSubmit={e => {
                         e.preventDefault()
+                        console.log("33")
+                        dispatch(updateTask({ id: _id, comment: newComment }))
                     }}
                 >
                     <input
                         type="text"
-                        name=""
-                        id=""
-                        className="outline-none border-none bg-transparent w-full "
+                        value={newComment}
+                        onChange={e => {
+                            setNewComment(e.target.value)
+                        }}
+                        className="outline-none border-none bg-transparent w-full"
                     />
                     <div className="flex justify-between items-center">
                         <span>

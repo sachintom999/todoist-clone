@@ -34,8 +34,6 @@ const Task = ({
         4: "border-white-400",
     }
 
-    console.log("labels", labels)
-
     const priorityClassName = priorityClass[priority] || "white"
 
     const markComplete = () => {

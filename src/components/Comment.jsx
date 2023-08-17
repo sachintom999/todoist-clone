@@ -1,5 +1,12 @@
+import Picker from "emoji-picker-react"
+import { useState } from "react"
 import { MdOutlineAddReaction } from "react-icons/md"
-const Comment = ({ comment: { text, reactions, createdAt, user } }) => {
+import { useDispatch } from "react-redux"
+import { updateComment } from "../redux/tasks"
+const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const dispatch = useDispatch()
+
     return (
         <>
             <div className="flex p-3 ">
@@ -24,20 +31,45 @@ const Comment = ({ comment: { text, reactions, createdAt, user } }) => {
                             <MdOutlineAddReaction
                                 fontSize={20}
                                 className="inline cursor-pointer"
+                                onClick={() => {
+                                    setShowEmojiPicker(true)
+                                }}
                             />
+
+                            {showEmojiPicker && (
+                                <Picker
+                                    // width={250}
+                                    // height={250}
+                                    onEmojiClick={(emojiData, event) => {
+                                        // console.log(emojiData.emoji)
+                                        setShowEmojiPicker(false)
+                                        dispatch(
+                                            updateComment({
+                                                id: _id,
+                                                reaction: {
+                                                    emoji: emojiData.emoji,
+                                                },
+                                            })
+                                        )
+                                    }}
+                                    className="absolute top-10 left-10"
+                                />
+                            )}
                         </span>
                     </p>
                     <p className="text-xs mt-4">{text}</p>
                 </div>
             </div>
 
-            <div className="">
+            <div className="flex flex-wrap">
                 {reactions?.map(reaction => {
                     return (
-                        <>
+                        <span className="flex justify-between border-2  border-blue-400 w-16 mx-4 my-2 px-3 rounded-3xl items-center cursor-pointer">
                             <span>{reaction.emoji}</span>
-                            <span>{reaction?.users?.length}</span>
-                        </>
+                            <span className="text-xs text-blue-400">
+                                {reaction?.users?.length}
+                            </span>
+                        </span>
                     )
                 })}
             </div>

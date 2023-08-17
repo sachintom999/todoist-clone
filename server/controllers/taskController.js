@@ -59,7 +59,7 @@ const getAllTasks = async (req, res) => {
             nonCompletedSubtasksCount: nonCompletedSubtasks.length,
         }
     })
-    console.log("tasksWithSubtaskCounts", tasksWithSubtaskCounts)
+    // console.log("tasksWithSubtaskCounts", tasksWithSubtaskCounts)
     return res.json(tasksWithSubtaskCounts)
 }
 
@@ -119,12 +119,31 @@ const updateTask = async (req, res) => {
         const subtask = await Task.create({
             title,
             desc,
-            // parentTask: parentTaskId // Assign the parent task ID
+            parentTask: parentTaskId, // Assign the parent task ID
         })
 
         task = await Task.findOneAndUpdate(
             { _id: parentTaskId },
             { $push: { subtasks: subtask._id } }, // Add subtask ID to the subtasks array
+            { new: true }
+        )
+    }
+
+    if (["comment"] in req.body) {
+        console.log("134 comment in req body here...")
+
+        const { comment: text } = req.body
+
+        const comment1 = await Comment.create({
+            text,
+            // user: user._id,
+            task: id, // Assign the comment to the Todoist Clone task
+            reactions: [],
+        })
+
+        task = await Task.findOneAndUpdate(
+            { _id: id },
+            { $push: { comments: comment1._id } }, // Add subtask ID to the subtasks array
             { new: true }
         )
     } else {

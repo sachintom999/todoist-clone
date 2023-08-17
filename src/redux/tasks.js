@@ -33,6 +33,20 @@ export const updateTask = createAsyncThunk(
     }
 )
 
+export const updateComment = createAsyncThunk(
+    "tasks/updateComment",
+    async payload => {
+        const { id, ...reqBody } = payload
+        console.log("in updateComment --reqBody", reqBody)
+        const response = await axios.patch(
+            `http://localhost:3000/api/comments/${id}`,
+            reqBody
+        )
+
+        return response.data
+    }
+)
+
 // export const updateTask = createAsyncThunk(
 //     "tasks/updateTask",
 //     async ({ id, priority }) => {

@@ -105,6 +105,7 @@ async function insertSampleData() {
             section: codingSection._id,
             parent_task: todoistCloneTask._id, // Assign parent task
             user: user._id, // Assign the user
+            parentTask: todoistCloneTask._id,
         })
 
         const backendSubtask = await Task.create({
@@ -116,6 +117,7 @@ async function insertSampleData() {
             parent_task: todoistCloneTask._id, // Assign parent task
             user: user._id, // Assign the user
             completed: true,
+            parentTask: todoistCloneTask._id,
         })
 
         const comment = await Comment.create({
