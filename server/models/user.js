@@ -1,15 +1,17 @@
+// const faker = require("faker")
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema(
     {
-        username: { type: String, required: true, unique: true },
         email: { type: String, required: true, unique: true },
-        // You can add more fields like name, profile picture, etc.
+        firstName: { type: String, default: "sachin" },
+        lastName: { type: String, default: "sam" },
+        image: { type: String, default: "https://picsum.photos/200" },
     },
     { timestamps: true }
 )
 
-const User = mongoose.model("User", UserSchema)
+const User = mongoose.model("TUser", UserSchema)
 
 module.exports = User

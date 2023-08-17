@@ -1,6 +1,11 @@
 const { query } = require("express")
 const Task = require("../models/task")
+const Project = require("../models/project")
+const Section = require("../models/section")
+const Label = require("../models/label")
+const Comment = require("../models/comment")
 const mongoose = require("mongoose")
+const { pl } = require("date-fns/locale")
 
 const createTask = async (req, res) => {
     console.log("req.body", req.body)
@@ -32,10 +37,15 @@ const getAllTasks = async (req, res) => {
     const query = req.query
     console.log("query", query)
 
-    const tasks = await Task.find().sort({ createdAt: -1 }).populate("subtasks")
+    const tasks = await Task.find()
+        .sort({ createdAt: -1 })
+        .populate("subtasks")
+        .populate("project")
+        .populate("section")
+        .populate("labels")
 
     const tasksWithSubtaskCounts = tasks.map(task => {
-        const subtasks = task.subtasks || []
+        const subtasks = task?.subtasks || []
 
         // Calculate the number of completed and non-completed subtasks
         const completedSubtasks = subtasks.filter(subtask => subtask.completed)
@@ -49,16 +59,17 @@ const getAllTasks = async (req, res) => {
             nonCompletedSubtasksCount: nonCompletedSubtasks.length,
         }
     })
-    // console.log("tasksWithSubtaskCounts", tasksWithSubtaskCounts)
+    console.log("tasksWithSubtaskCounts", tasksWithSubtaskCounts)
     return res.json(tasksWithSubtaskCounts)
 }
 
 const getSingleTask = async (req, res) => {
+    console.log("62")
     const { id } = req.params
     const task = await Task.getParentTaskWithSubtasks(id)
     // console.log("task", task)
 
-    const subtasks = task.subtasks || []
+    const subtasks = task?.subtasks || []
 
     // Calculate the number of completed and non-completed subtasks
     const completedSubtasks = subtasks.filter(subtask => subtask.completed)
@@ -100,19 +111,38 @@ const deleteTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
     const { id } = req.params
+    console.log("req.body", req.body)
+
+    let task
+
+    if (["subtask"] in req.body) {
+        const subtask = await Task.create({
+            title,
+            desc,
+            // parentTask: parentTaskId // Assign the parent task ID
+        })
+
+        task = await Task.findOneAndUpdate(
+            { _id: parentTaskId },
+            { $push: { subtasks: subtask._id } }, // Add subtask ID to the subtasks array
+            { new: true }
+        )
+    } else {
+        task = await Task.findOneAndUpdate(
+            { _id: id },
+            // { ...req.body },
+            { $set: { ...req.body } },
+            { new: true }
+        )
+    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: "no such task" })
     }
 
-    const task = await Task.findOneAndUpdate(
-        { _id: id },
-        { ...req.body },
-        { new: true }
-    )
-    if (!task) {
-        return res.status(404).json({ error: "no such task" })
-    }
+    // if (!task) {
+    //     return res.status(404).json({ error: "no such task" })
+    // }
 
     return res.status(200).json({ task })
 }

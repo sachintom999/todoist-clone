@@ -6,20 +6,28 @@ import { MdOutlineMoreHoriz } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
 import { createTask, decrement } from "../redux/tasks"
 
-const AddTaskForm = ({ formOpen, setFormOpen }) => {
+const AddTaskForm = ({
+    formOpen,
+    setFormOpen,
+    context,
+    titleProp,
+    descProp,
+}) => {
+    console.log({ titleProp, descProp })
+
     const { anyFormOpen } = useSelector(state => state.tasks)
 
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
+    const [title, setTitle] = useState(titleProp ? titleProp : "")
+    const [description, setDescription] = useState(descProp ? descProp : "")
 
     const dispatch = useDispatch()
     const handleSubmit = e => {
         e.preventDefault()
         console.log("form submit", { title, description })
-        dispatch(createTask({ title, description }))
+        // dispatch(createTask({ title, description }))
     }
 
-    return anyFormOpen && formOpen ? (
+    return (
         <form
             className="flex flex-col bg-dark1  border rounded-md border-gray-600 mt-4"
             onSubmit={handleSubmit}
@@ -84,7 +92,7 @@ const AddTaskForm = ({ formOpen, setFormOpen }) => {
                 </div>
             </div>
         </form>
-    ) : null
+    )
 }
 
 export default AddTaskForm

@@ -62,6 +62,7 @@ export const tasksSlice = createSlice({
             labels: [],
             sample: [1, 2, 3],
         },
+        newTaskForm: {},
     },
     reducers: {
         increment: state => {
@@ -72,6 +73,10 @@ export const tasksSlice = createSlice({
         },
         reset: state => {
             state.noOfOpenForms = 0
+        },
+
+        updateNewTaskForm: (state, action) => {
+            state.newTaskForm = action.payload
         },
 
         updatetaskDetailModalState: (state, action) => {
@@ -107,10 +112,11 @@ export const tasksSlice = createSlice({
                 .post("http://localhost:3000/api/tasks", {
                     title,
                     desc: description,
-                    section: "Coding",
                 })
                 .then(res => {
-                    state.tasks = [...state.tasks, res.data]
+                    console.log("res.data", res.data)
+
+                    // state.tasks = [...state.tasks, res.data]
                 })
         },
 
@@ -156,11 +162,14 @@ export const tasksSlice = createSlice({
             const todaysTasks = allTasks.filter(
                 task =>
                     !task.completed &&
-                    task.dueDate.split("T")[0] === currentDate
+                    task.dueDate?.split("T")[0] === currentDate
             )
+
+            console.log("todaysTasks", todaysTasks)
+
             const overdueTasks = allTasks.filter(
                 task =>
-                    !task.completed && task.dueDate.split("T")[0] < currentDate
+                    !task.completed && task.dueDate?.split("T")[0] < currentDate
             )
 
             if (overdueTasks.length > 0)
@@ -186,6 +195,7 @@ export const tasksSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(fetchAllTasks.fulfilled, (state, action) => {
+            console.log("action.payload", action.payload)
             state.taskList = action.payload
         })
         builder.addCase(fetchTaskDetail.fulfilled, (state, action) => {
@@ -204,6 +214,7 @@ export const tasksSlice = createSlice({
 export const {
     increment,
     updatetaskDetailModalState,
+    updateNewTaskForm,
     completeTask,
     filterTasks,
     getAllTasks,

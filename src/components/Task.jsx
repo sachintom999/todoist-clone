@@ -8,6 +8,7 @@ import {
     fetchTaskDetail,
     openTaskDetailForm,
 } from "../redux/tasks"
+import LabelList from "./LabelList"
 
 const Task = ({
     task: {
@@ -20,6 +21,8 @@ const Task = ({
         nonCompletedSubtasksCount,
         subtasks,
         priority,
+        section,
+        labels,
     },
 }) => {
     const dispatch = useDispatch()
@@ -30,6 +33,8 @@ const Task = ({
         3: "border-blue-600",
         4: "border-white-400",
     }
+
+    console.log("labels", labels)
 
     const priorityClassName = priorityClass[priority] || "white"
 
@@ -95,12 +100,14 @@ const Task = ({
                 <span>
                     <BiComment fontSize={10} />
                 </span>
-
                 <span className={timeClassName}>
                     <BsCalendar3 fontSize={10} className="inline" />{" "}
                     {new Date(dueDate).toLocaleString("en-US", options)}
                 </span>
-                <span className="">{project}</span>
+                <span>{project.name}</span>
+                {section?.name && <span>/{section?.name}</span>}
+
+                {labels.length > 0 ? <LabelList labels={labels} /> : null}
             </div>
         </div>
     )

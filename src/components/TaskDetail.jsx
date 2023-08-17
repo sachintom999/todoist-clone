@@ -1,5 +1,9 @@
+import Picker from "emoji-picker-react"
+
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import { useEffect } from "react"
 import { AiOutlinePlus } from "react-icons/ai"
+import { TbSection } from "react-icons/tb"
 
 import { useDispatch } from "react-redux"
 import {
@@ -17,6 +21,9 @@ import LabelModal from "./LabelModal"
 import { getPriorityColor } from "../config/helpers"
 import LabelContainer from "./LabelContainer"
 import PriorityContainer from "./PriorityContainer"
+import AddTaskForm from "./AddTaskForm"
+import AddForm from "./AddForm"
+import CommentsContainer from "./CommentsContainer"
 const TaskDetail = () => {
     const modalRef = useRef(null)
     // console.log("modalRef.current", modalRef.current)
@@ -25,7 +32,7 @@ const TaskDetail = () => {
     const dispatch = useDispatch()
     const { taskDetailModalContents } = useSelector(state => state.tasks)
 
-    // console.log("taskDetailModalContents", taskDetailModalContents)
+    console.log("taskDetailModalContents", taskDetailModalContents)
 
     // console.log("taskDetailModalContents", taskDetailModalContents)
 
@@ -40,6 +47,8 @@ const TaskDetail = () => {
         subtasks,
         completedSubtasks,
         nonCompletedSubtasks,
+        section,
+        comments,
     } = taskDetailModalContents
 
     const priorityClass = {
@@ -68,7 +77,10 @@ const TaskDetail = () => {
                     updateTask({
                         id: _id,
                         // labels: taskDetailModalContents.labels,
-                        labels: ["qqq", "www"],
+                        labels: [
+                            "64ddb9c0aaa93e44ec74999b",
+                            "64ddb99aaaa93e44ec74999a",
+                        ],
                     })
                 )
 
@@ -84,7 +96,7 @@ const TaskDetail = () => {
     }, [])
 
     return (
-        <div className="absolute top-22 left-42 text-white w-2/3 h-2/3 bg-gray-900 rounded-md">
+        <div className="absolute top-3 left-42 text-white w-2/3 h-3/4 bg-gray-900 rounded-md z-20 border-4 border-white">
             {showPriorityModal && (
                 <div ref={modalRef}>
                     <PriorityModal
@@ -104,7 +116,11 @@ const TaskDetail = () => {
                 </div>
             )}
             <div className="w-full bg-gray-500 p-3 min-h-fit flex justify-between text-xs">
-                <span>{project} / [SECTION-NAME] </span>
+                <span>
+                    {project?.name} /{" "}
+                    <TbSection className="inline text-gray-800" fontSize={20} />{" "}
+                    {section?.name}
+                </span>
                 <span
                     onClick={() => {
                         dispatch(closeTaskDetailForm())
@@ -114,7 +130,7 @@ const TaskDetail = () => {
                 </span>
             </div>
             <div className="w-full flex h-full ">
-                <div className="left-section w-4/6  bg-gray-200 p-5 ">
+                <div className="left-section w-4/6  bg-gray-200 p-5 overflow-y-auto ">
                     <input
                         type="checkbox"
                         name="asdsa"
@@ -193,29 +209,47 @@ const TaskDetail = () => {
                     )}
 
                     <div className="text-xs flex items-center mt-10 justify-between">
-                        <span>
-                            <AiOutlinePlus className="inline mr-2" /> Add
-                            sub-task
-                        </span>
-                        <button
-                            className="hover:bg-slate-400 py-2 px-3 rounded-md bg-slate-700"
-                            onClick={() => {
-                                setShowCompleted(!showCompleted)
-                            }}
-                        >
-                            {showCompleted ? "Hide" : "Show"} Completed
-                        </button>
+                        {subtasks?.length === 0 && (
+                            <span>
+                                <AiOutlinePlus className="inline mr-2" /> Add
+                                sub-task
+                            </span>
+                        )}
                     </div>
 
                     {nonCompletedSubtasks?.length > 0 && (
                         <div className="text-sm mt-3">
-                            <p>
-                                Sub-tasks{" "}
+                            <p className="flex justify-between items-center">
                                 <span>
-                                    {completedSubtasks.length}/{subtasks.length}
+                                    Sub-tasks
+                                    <span className="text-xs ml-2">
+                                        {completedSubtasks?.length}/
+                                        {subtasks?.length}
+                                    </span>
+                                    ...
+                                    <div className="w-8 h-8">
+                                        <CircularProgressbar
+                                            value={25}
+                                            strokeWidth={150}
+                                            styles={buildStyles({
+                                                strokeLinecap: "butt",
+                                            })}
+                                        />
+                                    </div>
                                 </span>
+                                {completedSubtasks?.length > 0 && (
+                                    <button
+                                        className="hover:bg-slate-400 py-2 px-3 rounded-md bg-slate-700 text-xs"
+                                        onClick={() => {
+                                            setShowCompleted(!showCompleted)
+                                        }}
+                                    >
+                                        {showCompleted ? "Hide" : "Show"}{" "}
+                                        Completed
+                                    </button>
+                                )}
                             </p>
-                            {nonCompletedSubtasks.map(subtask => {
+                            {nonCompletedSubtasks?.map(subtask => {
                                 return (
                                     <Subtask
                                         key={subtask._id}
@@ -230,11 +264,13 @@ const TaskDetail = () => {
                                 </span>
                             </div>
                             <hr className="border text-gray-50 mt-4" />
+                            {/* <AddTaskForm /> */}
+                            <AddForm />
                         </div>
                     )}
                     {showCompleted && completedSubtasks?.length > 0 && (
                         <div className="text-sm mt-3">
-                            {completedSubtasks.map(subtask => {
+                            {completedSubtasks?.map(subtask => {
                                 return (
                                     <Subtask
                                         key={subtask._id}
@@ -248,17 +284,21 @@ const TaskDetail = () => {
                         </div>
                     )}
 
-                    <h3 className="mt-10">Comments</h3>
+                    {/* <h3 className="mt-10">Comments</h3>
                     <hr className="mt-4" />
 
                     <div className="comment-container overflow-y-scroll">
                         <Comment />
-                        {/* <Comment /> */}
-                    </div>
+                       
+                    </div> */}
+                    {/* <Picker /> */}
+                    <CommentsContainer comments={comments} />
                 </div>
                 <div className="right-section w-2/6  bg-gray-300 p-5 text-sm">
                     <p className="text-gray-300 py-3">Project</p>
-                    <p className="text-xs">{project}</p>
+                    <p className="text-xs">
+                        {project?.name} / {section?.name}{" "}
+                    </p>
                     <hr className="border text-gray-50" />
 
                     <p className="text-gray-300 py-3">Due date</p>
