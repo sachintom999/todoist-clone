@@ -6,6 +6,7 @@ const Label = require("../models/label")
 const Comment = require("../models/comment")
 const mongoose = require("mongoose")
 const { pl } = require("date-fns/locale")
+const { markSubtasksAsComplete } = require("../helpers/taskHelpers")
 
 const createTask = async (req, res) => {
     console.log("req.body", req.body)
@@ -111,9 +112,33 @@ const deleteTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
     const { id } = req.params
-    console.log("req.body", req.body)
+    console.log("🔴 in updateTask req.body", req.body)
 
     let task
+
+    if (["completed"] in req.body) {
+        console.log("120")
+
+        if (req.body.completed) {
+            markSubtasksAsComplete(id)
+                .then(() => {
+                    console.log("All subtasks marked as complete")
+                    // return res.status(200).json({ message: "success" })
+                })
+                .catch(error => {
+                    console.error("Error marking subtasks as complete:", error)
+                    // return res.status(500).json({ message: "error" })
+                })
+        } else {
+            task = await Task.findOneAndUpdate(
+                { _id: id },
+                // { ...req.body },
+                { $set: { ...req.body } },
+                { new: true }
+            )
+            return res.status(200).json({ message: "success" })
+        }
+    }
 
     if (["subtask"] in req.body) {
         const subtask = await Task.create({

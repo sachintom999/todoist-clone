@@ -1,7 +1,6 @@
 import { useEffect } from "react"
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
-import { AiOutlineBranches, AiOutlinePlus } from "react-icons/ai"
-import { MdKeyboardArrowRight } from "react-icons/md"
+import { AiOutlinePlus } from "react-icons/ai"
 import { TbSection } from "react-icons/tb"
 
 import { useRef, useState } from "react"
@@ -19,8 +18,8 @@ import AddForm from "./AddForm"
 import CommentsContainer from "./CommentsContainer"
 import LabelContainer from "./LabelContainer"
 import LabelModal from "./LabelModal"
-import PriorityContainer from "./PriorityContainer"
 import ParentTask from "./ParentTask"
+import PriorityContainer from "./PriorityContainer"
 const TaskDetail = () => {
     const modalRef = useRef(null)
     // console.log("modalRef.current", modalRef.current)
@@ -36,6 +35,7 @@ const TaskDetail = () => {
     const {
         title,
         _id,
+        completed,
         desc,
         priority,
         dueDate,
@@ -49,14 +49,14 @@ const TaskDetail = () => {
         parentTask,
     } = taskDetailModalContents
 
+    const [isComplete, setIsComplete] = useState(completed)
+
     const priorityClass = {
         1: "border-red-500",
         2: "border-yellow-700",
         3: "border-blue-600",
         4: "border-white-400",
     }
-
-    const priorityClassName = priorityClass[priority] || "white"
 
     const [showPriorityModal, setShowPriorityModal] = useState(false)
     const [showLabelModal, setShowLabelModal] = useState(false)
@@ -132,13 +132,24 @@ const TaskDetail = () => {
                     {parentTask && <ParentTask parentTask={parentTask} />}
                     <input
                         type="checkbox"
-                        name="asdsa"
-                        id="asdas"
                         className={`w-4 h-4 rounded-full bg-transparent border-2  border-${getPriorityColor(
                             priority
                         )}   ${showForm ? "opacity-60" : ""} `}
-                        onChange={() => {}}
+                        onChange={e => {
+                            console.log("e.target.value", e.target.checked)
+                            setIsComplete(e.target.checked)
+
+                            console.log("isComplete", isComplete)
+
+                            dispatch(
+                                updateTask({
+                                    id: _id,
+                                    completed: e.target.checked,
+                                })
+                            )
+                        }}
                         disabled={showForm ? "disabled" : ""}
+                        checked={isComplete}
                     />
                     {!showForm && (
                         <div
