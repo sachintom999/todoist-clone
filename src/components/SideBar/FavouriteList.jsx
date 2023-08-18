@@ -14,10 +14,14 @@ const FavouriteList = () => {
     return (
         <div>
             {favourites?.projects?.map(project => (
-                <SidebarItem item={project} itemType="project" />
+                <SidebarItem
+                    key={project._id}
+                    item={project}
+                    itemType="project"
+                />
             ))}
             {favourites?.labels?.map(label => (
-                <SidebarItem item={label} itemType="label" />
+                <SidebarItem key={label._id} item={label} itemType="label" />
             ))}
         </div>
     )

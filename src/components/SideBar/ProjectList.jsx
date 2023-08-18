@@ -14,7 +14,11 @@ const ProjectList = () => {
     return (
         <div>
             {projects?.map(project => (
-                <SidebarItem item={project} itemType="project" />
+                <SidebarItem
+                    key={project._id}
+                    item={project}
+                    itemType="project"
+                />
             ))}
         </div>
     )
