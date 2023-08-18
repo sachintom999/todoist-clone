@@ -4,6 +4,8 @@ import { BsCalendar3, BsInbox } from "react-icons/bs"
 import { MdToday } from "react-icons/md"
 import { NavLink } from "react-router-dom"
 import { sideBarOptions } from "../config/menu"
+import ProjectList from "./SideBar/ProjectList"
+import FavouriteList from "./SideBar/FavouriteList"
 const Sidebar = () => {
     const getIcon = route => {
         switch (route) {
@@ -47,8 +49,10 @@ const Sidebar = () => {
             })}
 
             <p>Favourites</p>
+            <FavouriteList />
 
             <p>Projects</p>
+            <ProjectList />
 
             <div className="flex">
                 <AiOutlinePlus fontSize={20} />

@@ -8,6 +8,7 @@ const projectSchema = new Schema(
         sections: [{ type: Schema.Types.ObjectId, ref: "Section" }],
         tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
         color: { type: String },
+        favourite: { type: Boolean, required: true, default: false },
     },
     { timestamps: true }
 )

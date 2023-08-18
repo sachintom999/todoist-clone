@@ -8,6 +8,21 @@ export const fetchAllTasks = createAsyncThunk(
         return response.data
     }
 )
+export const fetchAllFavourites = createAsyncThunk(
+    "tasks/fetchAllFavourites",
+    async () => {
+        const response = await axios.get("http://localhost:3000/api/favourites")
+        return response.data
+    }
+)
+
+export const fetchAllProjects = createAsyncThunk(
+    "tasks/fetchAllProjects",
+    async () => {
+        const response = await axios.get("http://localhost:3000/api/projects")
+        return response.data
+    }
+)
 
 export const fetchTaskDetail = createAsyncThunk(
     "tasks/fetchTaskDetail",
@@ -70,6 +85,8 @@ export const tasksSlice = createSlice({
         taskList: [],
         todaySections: [],
         loading: false,
+        projects: [],
+        favourites: [],
         taskDetailModalContents: {},
         labelOptions: ["option-1", "option-2"],
         taskDetailModalState: {
@@ -209,8 +226,15 @@ export const tasksSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(fetchAllTasks.fulfilled, (state, action) => {
-            console.log("action.payload", action.payload)
             state.taskList = action.payload
+        })
+        builder.addCase(fetchAllProjects.fulfilled, (state, action) => {
+            console.log("action.payload", action.payload)
+            state.projects = action.payload
+        })
+        builder.addCase(fetchAllFavourites.fulfilled, (state, action) => {
+            console.log("action.payload", action.payload)
+            state.favourites = action.payload
         })
         builder.addCase(fetchTaskDetail.fulfilled, (state, action) => {
             state.taskDetailModalContents = action.payload

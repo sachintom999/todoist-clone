@@ -3,6 +3,7 @@ import { useState } from "react"
 import { MdOutlineAddReaction } from "react-icons/md"
 import { useDispatch } from "react-redux"
 import { updateComment } from "../redux/tasks"
+import Reaction from "./Comment/Reaction"
 const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const dispatch = useDispatch()
@@ -48,6 +49,8 @@ const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
                                                 id: _id,
                                                 reaction: {
                                                     emoji: emojiData.emoji,
+                                                    // userId: "64de23b915bec7b2f5d601b4",
+                                                    userId: "64de23b915bec7b2f5d601b2",
                                                 },
                                             })
                                         )
@@ -63,14 +66,7 @@ const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
 
             <div className="flex flex-wrap">
                 {reactions?.map(reaction => {
-                    return (
-                        <span className="flex justify-between border-2  border-blue-400 w-16 mx-4 my-2 px-3 rounded-3xl items-center cursor-pointer">
-                            <span>{reaction.emoji}</span>
-                            <span className="text-xs text-blue-400">
-                                {reaction?.users?.length}
-                            </span>
-                        </span>
-                    )
+                    return <Reaction reaction={reaction} commentId={_id} />
                 })}
             </div>
         </>

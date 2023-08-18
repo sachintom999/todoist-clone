@@ -37,7 +37,7 @@ const CommentForm = () => {
                     className="h-44 border-2 border-white  w-full p-4 rounded-md flex-col justify-end"
                     onSubmit={e => {
                         e.preventDefault()
-                        console.log("33")
+                        setshowForm(false)
                         dispatch(updateTask({ id: _id, comment: newComment }))
                     }}
                 >
