@@ -1,20 +1,26 @@
 import { useState } from "react"
 import AddForm from "./AddForm"
 import AddTaskForm from "./AddTaskForm"
-const Subtask = ({ subtask: { title, desc }, completed }) => {
+import { fetchTaskDetail } from "../redux/tasks"
+import { useDispatch } from "react-redux"
+const Subtask = ({ subtask: { title, desc, _id }, completed }) => {
     const [showOptions, setShowOptions] = useState(false)
     const [showForm, setShowForm] = useState(false)
+    const dispatch = useDispatch()
 
     // console.log({ title, desc })
 
     return (
         <div
-            className="py-3 border-b px-2 "
+            className="py-3 border-b px-2  cursor-pointer"
             onMouseEnter={() => {
                 setShowOptions(true)
             }}
             onMouseLeave={() => {
                 setShowOptions(false)
+            }}
+            onClick={() => {
+                dispatch(fetchTaskDetail(_id))
             }}
         >
             {!showForm && (

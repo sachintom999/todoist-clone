@@ -1,5 +1,33 @@
 const Comment = require("../models/comment")
+const Task = require("../models/task")
+const User = require("../models/user")
 const mongoose = require("mongoose")
+
+const addComment = async (req, res) => {
+    console.log("6")
+    const { taskId } = req.params
+
+    const task = await Task.findById(taskId)
+    if (!task) {
+        return res.status(404).json({ error: "no such task" })
+    }
+
+    const { text } = req.body
+    const comment = await Comment.create({
+        text,
+        user: "64de23b915bec7b2f5d601b2",
+    })
+
+    await Task.updateOne(
+        { _id: task._id },
+        { $push: { comments: comment._id } },
+        { new: true }
+    )
+
+    await comment.populate("user")
+
+    return res.status(200).json(comment)
+}
 
 const updateComment = async (req, res) => {
     const { id: commentId } = req.params
@@ -132,4 +160,4 @@ const updateComment = async (req, res) => {
 
 // }
 
-module.exports = { updateComment }
+module.exports = { updateComment, addComment }

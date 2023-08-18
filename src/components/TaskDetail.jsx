@@ -7,6 +7,7 @@ import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
     closeTaskDetailForm,
+    fetchTaskDetail,
     updateTask,
     updatetaskDetailModalState,
 } from "../redux/tasks"
@@ -26,7 +27,9 @@ const TaskDetail = () => {
     const [showCompleted, setShowCompleted] = useState(true)
 
     const dispatch = useDispatch()
-    const { taskDetailModalContents } = useSelector(state => state.tasks)
+    const { taskDetailModalContents, taskDetailModalState } = useSelector(
+        state => state.tasks
+    )
 
     console.log("taskDetailModalContents", taskDetailModalContents)
 
@@ -65,7 +68,7 @@ const TaskDetail = () => {
     const [updatedDesc, setUpdatedDesc] = useState(desc)
 
     useEffect(() => {
-        dispatch(updatetaskDetailModalState({ labels }))
+        // dispatch(updatetaskDetailModalState({ labels }))
 
         const closeModalOnOutsideClick = e => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {

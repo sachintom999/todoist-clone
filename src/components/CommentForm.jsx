@@ -3,7 +3,7 @@ import { ImAttachment } from "react-icons/im"
 
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { updateTask } from "../redux/tasks"
+import { createComment, updateTask } from "../redux/tasks"
 const CommentForm = () => {
     const [showForm, setshowForm] = useState(false)
     const [newComment, setNewComment] = useState("")
@@ -38,7 +38,10 @@ const CommentForm = () => {
                     onSubmit={e => {
                         e.preventDefault()
                         setshowForm(false)
-                        dispatch(updateTask({ id: _id, comment: newComment }))
+                        setNewComment("")
+                        dispatch(
+                            createComment({ taskId: _id, text: newComment })
+                        )
                     }}
                 >
                     <input

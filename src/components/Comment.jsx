@@ -66,7 +66,13 @@ const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
 
             <div className="flex flex-wrap">
                 {reactions?.map(reaction => {
-                    return <Reaction reaction={reaction} commentId={_id} />
+                    return (
+                        <Reaction
+                            key={reaction._id}
+                            reaction={reaction}
+                            commentId={_id}
+                        />
+                    )
                 })}
             </div>
         </>

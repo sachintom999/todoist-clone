@@ -1,67 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
-export const fetchAllTasks = createAsyncThunk(
-    "tasks/fetchAllTasks",
-    async () => {
-        const response = await axios.get("http://localhost:3000/api/tasks")
-        return response.data
-    }
-)
-export const fetchAllFavourites = createAsyncThunk(
-    "tasks/fetchAllFavourites",
-    async () => {
-        const response = await axios.get("http://localhost:3000/api/favourites")
-        return response.data
-    }
-)
-
-export const fetchAllProjects = createAsyncThunk(
-    "tasks/fetchAllProjects",
-    async () => {
-        const response = await axios.get("http://localhost:3000/api/projects")
-        return response.data
-    }
-)
-
-export const fetchTaskDetail = createAsyncThunk(
-    "tasks/fetchTaskDetail",
-    async id => {
-        const response = await axios.get(
-            `http://localhost:3000/api/tasks/${id}`
-        )
-        return response.data
-    }
-)
-
-export const updateTask = createAsyncThunk(
-    "tasks/updateTask",
-    async payload => {
-        const { id, ...reqBody } = payload
-        console.log("reqBody", reqBody)
-        const response = await axios.patch(
-            `http://localhost:3000/api/tasks/${id}`,
-            reqBody
-        )
-
-        return response.data
-    }
-)
-
-export const updateComment = createAsyncThunk(
-    "tasks/updateComment",
-    async payload => {
-        const { id, ...reqBody } = payload
-        console.log("in updateComment --reqBody", reqBody)
-        const response = await axios.patch(
-            `http://localhost:3000/api/comments/${id}`,
-            reqBody
-        )
-
-        return response.data
-    }
-)
-
 // export const updateTask = createAsyncThunk(
 //     "tasks/updateTask",
 //     async ({ id, priority }) => {
@@ -90,6 +29,7 @@ export const tasksSlice = createSlice({
         taskDetailModalContents: {},
         labelOptions: ["option-1", "option-2"],
         taskDetailModalState: {
+            msg: "hello",
             labels: [],
             sample: [1, 2, 3],
         },
@@ -111,7 +51,7 @@ export const tasksSlice = createSlice({
         },
 
         updatetaskDetailModalState: (state, action) => {
-            // console.log("action.payload", action.payload)
+            console.log("action.payload SACHIN -", action.payload)
             state.taskDetailModalState = {
                 ...state.taskDetailModalState,
                 ...action.payload,
@@ -239,15 +179,105 @@ export const tasksSlice = createSlice({
         builder.addCase(fetchTaskDetail.fulfilled, (state, action) => {
             state.taskDetailModalContents = action.payload
         })
-        builder.addCase(updateTask.fulfilled, (state, action) => {
-            const { task } = action.payload
-            state.taskDetailModalContents = {
-                ...state.taskDetailModalContents,
-                ...task,
-            }
+
+        builder.addCase(createComment.fulfilled, (state, action) => {
+            state.taskDetailModalContents.comments.push(action.payload)
         })
+
+        builder.addCase(updateTask.fulfilled, (state, action) => {
+            console.log("action.payload", action.payload)
+
+            // state.taskDetailModalContents = action.payload
+        })
+
+        // builder.addCase(updateTask.fulfilled, (state, action) => {
+        //     const { task } = action.payload
+        //     state.taskDetailModalContents = {
+        //         ...state.taskDetailModalContents,
+        //         ...task,
+        //     }
+        // })
     },
 })
+
+export const fetchAllTasks = createAsyncThunk(
+    "tasks/fetchAllTasks",
+    async () => {
+        const response = await axios.get("http://localhost:3000/api/tasks")
+        return response.data
+    }
+)
+export const fetchAllFavourites = createAsyncThunk(
+    "tasks/fetchAllFavourites",
+    async () => {
+        const response = await axios.get("http://localhost:3000/api/favourites")
+        return response.data
+    }
+)
+
+export const fetchAllProjects = createAsyncThunk(
+    "tasks/fetchAllProjects",
+    async () => {
+        const response = await axios.get("http://localhost:3000/api/projects")
+        return response.data
+    }
+)
+
+export const fetchTaskDetail = createAsyncThunk(
+    "tasks/fetchTaskDetail",
+    async id => {
+        const response = await axios.get(
+            `http://localhost:3000/api/tasks/${id}`
+        )
+        return response.data
+    }
+)
+
+export const updateTask = createAsyncThunk(
+    "tasks/updateTask",
+    async payload => {
+        const { id, ...reqBody } = payload
+        console.log("reqBody", reqBody)
+        const response = await axios.patch(
+            `http://localhost:3000/api/tasks/${id}`,
+            reqBody
+        )
+
+        return response.data
+    }
+)
+
+export const updateComment = createAsyncThunk(
+    "tasks/updateComment",
+    async payload => {
+        const { id, ...reqBody } = payload
+        console.log("in updateComment --reqBody", reqBody)
+        const response = await axios.patch(
+            `http://localhost:3000/api/comments/${id}`,
+            reqBody
+        )
+        console.log("response.data", response.data)
+
+        return response.data
+    }
+)
+export const createComment = createAsyncThunk(
+    "tasks/createComment",
+    async payload => {
+        const { taskId, ...reqBody } = payload
+        console.log("in createComment --reqBody", reqBody)
+        const response = await axios.post(
+            `http://localhost:3000/api/comments/create/${taskId}`,
+            reqBody
+        )
+
+        console.log("response.data", response.data)
+
+        return response.data
+    }
+)
+
+//  dispatch ( createComment( {taskId:"",text:"" }  ))
 
 export const {
     increment,

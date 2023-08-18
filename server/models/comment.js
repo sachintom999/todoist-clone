@@ -1,14 +1,15 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+// const User = require("../models/user")
 
 const CommentSchema = new Schema(
     {
         text: { type: String, required: true },
         user: {
             type: Schema.Types.ObjectId,
-            ref: "User",
+            ref: "TUser",
             required: true,
-            default: "64de23b915bec7b2f5d601b2",
+            // default: "64de23b915bec7b2f5d601b2",
         },
         reactions: [
             {
