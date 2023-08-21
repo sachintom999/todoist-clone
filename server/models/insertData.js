@@ -55,7 +55,7 @@ async function insertSampleData() {
         const workProject = await Project.create({
             name: "Work",
             owner: user._id,
-            color: "#ffffff",
+            color: "#11c023",
             sections: [],
         })
 

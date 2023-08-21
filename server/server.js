@@ -20,6 +20,13 @@ app.use("/api/comments", commentRoutes)
 app.use("/api/projects", projectRoutes)
 app.use("/api/favourites", favouriteRoutes)
 
+app.get("/", (req, res) => {
+    return res.json({ msg: null })
+})
+app.post("/", (req, res) => {
+    return res.json({ msg: 123 })
+})
+
 // DB
 
 mongoose

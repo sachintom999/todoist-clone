@@ -10,7 +10,12 @@ import {
     AiOutlineTag,
     AiOutlineTags,
 } from "react-icons/ai"
-import { BiCategory, BiComment, BiSolidUserCircle } from "react-icons/bi"
+import {
+    BiCategory,
+    BiComment,
+    BiSolidUserCircle,
+    BiInfoCircle,
+} from "react-icons/bi"
 import {
     BsCalendar3,
     BsCheck,
@@ -75,6 +80,7 @@ const iconMappings = {
     flag: BsFlagFill,
     check: BsCheck,
     arrowRight: MdKeyboardArrowRight,
+    info: BiInfoCircle,
     // Add more mappings here
 }
 

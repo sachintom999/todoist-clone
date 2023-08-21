@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import { AiOutlinePlus } from "react-icons/ai"
 import { TbSection } from "react-icons/tb"
+import ReactMarkdown from "react-markdown"
 
 import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -165,7 +166,9 @@ const TaskDetail = () => {
                                 <h3 className="font-bold outline-none bg-transparent border-none">
                                     {title}
                                 </h3>
-                                <p className="py-4 text-sm">{desc}</p>
+                                <ReactMarkdown className="py-4 text-sm">
+                                    {desc}
+                                </ReactMarkdown>
                             </div>
                         </div>
                     )}

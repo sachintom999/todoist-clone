@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import { pl } from "date-fns/locale"
 
 // export const updateTask = createAsyncThunk(
 //     "tasks/updateTask",
@@ -17,6 +18,15 @@ import axios from "axios"
 export const tasksSlice = createSlice({
     name: "tasks",
     initialState: {
+        deleteConfirmationModal: {
+            show: false,
+            data: {},
+        },
+        cornerModal: {
+            show: false,
+            data: {},
+        },
+
         count: 0,
         addTaskFormOpen: false,
         taskDetailOpen: false,
@@ -26,16 +36,24 @@ export const tasksSlice = createSlice({
         loading: false,
         projects: [],
         favourites: [],
+        labels: [],
         taskDetailModalContents: {},
         labelOptions: ["option-1", "option-2"],
         taskDetailModalState: {
-            msg: "hello",
             labels: [],
             sample: [1, 2, 3],
         },
-        newTaskForm: {},
+        newTaskForm: {
+            context: "", // global , section , subtask
+        },
+        user: null,
     },
     reducers: {
+        updatedeleteConfirmationModal: (state, action) => {
+            console.log("49 ", action.payload)
+            state.deleteConfirmationModal = action.payload
+        },
+
         increment: state => {
             state.anyFormOpen = true
         },
@@ -51,7 +69,6 @@ export const tasksSlice = createSlice({
         },
 
         updatetaskDetailModalState: (state, action) => {
-            console.log("action.payload SACHIN -", action.payload)
             state.taskDetailModalState = {
                 ...state.taskDetailModalState,
                 ...action.payload,
@@ -86,6 +103,18 @@ export const tasksSlice = createSlice({
                 })
                 .then(res => {
                     console.log("res.data", res.data)
+
+                    // state.tasks = [...state.tasks, res.data]
+                })
+        },
+        deleteTask: (state, action) => {
+            console.log("action.payload", action.payload)
+            const { taskId } = action.payload
+
+            axios
+                .delete(`http://localhost:3000/api/tasks/${taskId}`)
+                .then(res => {
+                    console.log("res.data  deleted..", res.data)
 
                     // state.tasks = [...state.tasks, res.data]
                 })
@@ -281,6 +310,7 @@ export const createComment = createAsyncThunk(
 
 export const {
     increment,
+    deleteTask,
     updatetaskDetailModalState,
     updateNewTaskForm,
     completeTask,
@@ -294,6 +324,7 @@ export const {
     openTaskDetailForm,
     closeTaskDetailForm,
     createTask,
+    updatedeleteConfirmationModal,
 } = tasksSlice.actions
 
 export default tasksSlice.reducer

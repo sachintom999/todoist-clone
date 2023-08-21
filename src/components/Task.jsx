@@ -1,12 +1,14 @@
+import { useDispatch } from "react-redux"
+import ReactMarkdown from "react-markdown"
+
 import { AiOutlineBranches } from "react-icons/ai"
-import { IoIosMore } from "react-icons/io"
 import { BiComment } from "react-icons/bi"
 import { BsCalendar3 } from "react-icons/bs"
-import { useDispatch } from "react-redux"
 import {
     completeTask,
     fetchTaskDetail,
     openTaskDetailForm,
+    updatedeleteConfirmationModal,
 } from "../redux/tasks"
 import LabelList from "./LabelList"
 
@@ -62,24 +64,40 @@ const Task = ({
                 })
             }}
         >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between relative">
                 <div>
                     <input
                         type="checkbox"
                         name="asdsa"
                         id="asdas"
                         className={`w-4 h-4 rounded-full bg-transparent border-2 ${priorityClassName}`}
-                        onChange={markComplete}
+                        onChange={e => {
+                            e.stopPropagation()
+                            markComplete()
+                        }}
                     />
 
                     <span className="ml-2 text-sm">{title}</span>
                 </div>
-                <div className="hover:bg-gray-400 px-1">
-                    <IoIosMore />
+                <div
+                    className="hover:bg-gray-400 px-1 cursor-pointer "
+                    onClick={e => {
+                        e.stopPropagation()
+                        console.log("77")
+
+                        dispatch(
+                            updatedeleteConfirmationModal({
+                                show: true,
+                                data: { title, _id },
+                            })
+                        )
+                    }}
+                >
+                    {/* <IoIosMore /> */} D
                 </div>
             </div>
             <div className="my-2">
-                <p className="text-xs">{desc}</p>
+                <ReactMarkdown className="text-xs">{desc}</ReactMarkdown>
             </div>
             <div className=" flex justify-between mt-2 text-xs items-center">
                 {subtasks.length > 0 && (

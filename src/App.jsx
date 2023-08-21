@@ -1,10 +1,11 @@
+import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Sidebar, Topbar } from "./components"
-import Home from "./pages/Home"
 import { BrowserRouter as Router } from "react-router-dom"
+import { Sidebar, Topbar } from "./components"
+import GlobalKeyboardShortcuts from "./components/GlobalKeyboardShortcuts"
+import AllModals from "./components/Modals/AllModals"
+import Home from "./pages/Home"
 import { fetchAllTasks } from "./redux/tasks"
-import { useEffect } from "react"
-
 const App = () => {
     const { tasks } = useSelector(state => state.tasks)
 
@@ -18,10 +19,12 @@ const App = () => {
 
     return (
         <div>
+            <AllModals />
             <Topbar />
 
             <div className="flex">
                 <Router>
+                    <GlobalKeyboardShortcuts />
                     <Sidebar />
                     <Home />
                 </Router>
