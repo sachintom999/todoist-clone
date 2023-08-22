@@ -3,29 +3,30 @@ const Task = require("../models/task")
 const Project = require("../models/project")
 const Section = require("../models/section")
 const Label = require("../models/label")
+const User = require("../models/user")
 const Comment = require("../models/comment")
 const mongoose = require("mongoose")
-const { pl } = require("date-fns/locale")
 const { markSubtasksAsComplete } = require("../helpers/taskHelpers")
 
 const createTask = async (req, res) => {
     console.log("req.body", req.body)
     const { title, desc } = req.body
-    // const user_id = req.user._id
-    const emptyFields = []
+    let { project } = req.body
 
-    if (!title) {
-        emptyFields.push("title")
-    }
-
-    if (emptyFields.length > 0) {
-        return res
-            .status(400)
-            .json({ error: "Please fill all the fields", emptyFields })
-    }
+    const currentUser = await User.findOne({})
+    console.log("currentUser", currentUser)
 
     try {
-        const task = await Task.create({ title, desc })
+        if (!project) {
+            project = await Project.getDefaultProject(currentUser._id)
+        }
+
+        const task = await Task.create({
+            title,
+            desc,
+            project: project._id,
+            user: currentUser,
+        })
         return res.status(201).json(task)
     } catch (error) {
         console.error("   error  ::", error)
@@ -191,10 +192,62 @@ const updateTask = async (req, res) => {
     return res.status(200).json({ task })
 }
 
+const getTodayTasks = async (req, res) => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    try {
+        const filters = {
+            // dueDate: { $lte: today },
+            parentTask: null,
+            completed: false,
+        }
+
+        const populateList = ["project", "section"]
+
+        const tasks = await Task.getTasksByFilterAndPopulate(
+            filters,
+            populateList
+        )
+
+        return res.status(200).json(tasks)
+    } catch (error) {
+        console.error(" taskController  error at line 199 ::", error)
+        return res.status(500).json({ error })
+    }
+}
+
+const getInboxTasks = async (req, res) => {
+    let project
+
+    const currentUser = await User.findOne({})
+    project = await Project.getDefaultProject(currentUser._id)
+
+    try {
+        const filters = {
+            project: project._id,
+        }
+
+        const populateList = []
+
+        const tasks = await Task.getTasksByFilterAndPopulate(
+            filters,
+            populateList
+        )
+
+        return res.status(200).json(tasks)
+    } catch (error) {
+        console.error(" taskController  error at line 199 ::", error)
+        return res.status(500).json({ error })
+    }
+}
+
 module.exports = {
     createTask,
     getAllTasks,
     getSingleTask,
     deleteTask,
     updateTask,
+    getTodayTasks,
+    getInboxTasks,
 }

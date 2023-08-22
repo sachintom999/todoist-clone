@@ -9,9 +9,14 @@ const projectSchema = new Schema(
         tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
         color: { type: String },
         favourite: { type: Boolean, required: true, default: false },
+        isInbox: { type: Boolean, required: true, default: false },
     },
     { timestamps: true }
 )
+
+projectSchema.statics.getDefaultProject = async function (ownerId) {
+    return await this.findOne({ isInbox: true, owner: ownerId })
+}
 
 const Project = mongoose.model("Project", projectSchema)
 

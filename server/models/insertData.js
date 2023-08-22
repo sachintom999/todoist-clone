@@ -56,6 +56,7 @@ async function insertSampleData() {
             owner: user._id,
             color: "#000000",
             sections: [],
+            isInbox: true,
         })
 
         const workProject = await Project.create({

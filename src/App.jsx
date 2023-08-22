@@ -6,8 +6,9 @@ import GlobalKeyboardShortcuts from "./components/GlobalKeyboardShortcuts"
 import AllModals from "./components/Modals/AllModals"
 import Home from "./pages/Home"
 import { fetchAllTasks } from "./redux/tasks"
+import Loading from "./components/Loading"
 const App = () => {
-    const { tasks } = useSelector(state => state.tasks)
+    const { tasks, appState } = useSelector(state => state.tasks)
 
     const dispatch = useDispatch()
 
@@ -18,18 +19,24 @@ const App = () => {
     // const { tasks } = useSelector(state => state.tasks)
 
     return (
-        <div>
-            <AllModals />
-            <Topbar />
+        <>
+            {appState.loading ? (
+                <Loading />
+            ) : (
+                <div>
+                    <AllModals />
+                    <Topbar />
 
-            <div className="flex">
-                <Router>
-                    <GlobalKeyboardShortcuts />
-                    <Sidebar />
-                    <Home />
-                </Router>
-            </div>
-        </div>
+                    <div className="flex">
+                        <Router>
+                            {/* <GlobalKeyboardShortcuts /> */}
+                            {/* <Sidebar /> */}
+                            <Home />
+                        </Router>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

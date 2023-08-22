@@ -14,7 +14,7 @@ const GlobalKeyboardShortcuts = () => {
             console.log(keysPressed.join(""))
 
             if (keysPressed.join("") === "gk") {
-                console.log("Shortcut triggered: G then K")
+                // console.log("Shortcut triggered: G then K")
 
                 setKeysPressed([])
             }

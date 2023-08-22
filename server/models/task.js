@@ -13,12 +13,10 @@ const TaskSchema = new Schema(
         project: {
             type: Schema.Types.ObjectId,
             ref: "Project",
-            default: "64ddf2e5e0a81791d0336325", // change it later
         },
         section: { type: Schema.Types.ObjectId, ref: "Section" },
         user: { type: Schema.Types.ObjectId, ref: "TUser" },
         parentTask: { type: Schema.Types.ObjectId, ref: "Task", default: null },
-        favourite: { type: Boolean, required: true, default: false },
     },
     { timestamps: true }
 )
@@ -49,6 +47,26 @@ TaskSchema.statics.getParentTaskWithSubtasks = async function (parentId) {
         return parentTask
     } catch (error) {
         console.error("Error fetching parent task:", error)
+        return null
+    }
+}
+
+TaskSchema.statics.getTasksByFilterAndPopulate = async function (
+    filters,
+    populateList
+) {
+    try {
+        const taskQuery = this.find(filters)
+
+        populateList?.forEach(async item => {
+            taskQuery.populate(item)
+        })
+
+        const tasks = await taskQuery.exec()
+
+        return tasks
+    } catch (error) {
+        console.error(" task  error at line 56 ::", error)
         return null
     }
 }

@@ -19,6 +19,7 @@ export const tasksSlice = createSlice({
     initialState: {
         appState: {
             online: navigator.onLine,
+            loading: true,
         },
 
         newTaskSettings: {
@@ -39,6 +40,10 @@ export const tasksSlice = createSlice({
             data: {},
         },
         addTaskModal: {
+            show: false,
+            data: {},
+        },
+        createEditLabelModal: {
             show: false,
             data: {},
         },
@@ -161,6 +166,10 @@ export const tasksSlice = createSlice({
             })
         },
 
+        updatecreateEditLabelModal: (state, action) => {
+            state.createEditLabelModal = action.payload
+        },
+
         getTodayTasks: (state, action) => {
             const allTasks = action.payload
 
@@ -208,6 +217,10 @@ export const tasksSlice = createSlice({
     extraReducers: builder => {
         builder.addCase(fetchAllTasks.fulfilled, (state, action) => {
             state.taskList = action.payload
+            state.appState.loading = false
+        })
+        builder.addCase(getAllLabels.fulfilled, (state, action) => {
+            state.labels = action.payload
         })
         builder.addCase(fetchAllProjects.fulfilled, (state, action) => {
             console.log("action.payload", action.payload)
@@ -263,6 +276,10 @@ export const fetchAllProjects = createAsyncThunk(
         return response.data
     }
 )
+export const getAllLabels = createAsyncThunk("tasks/getAllLabels", async () => {
+    const response = await axios.get("http://localhost:3000/api/labels")
+    return response.data
+})
 
 export const fetchTaskDetail = createAsyncThunk(
     "tasks/fetchTaskDetail",
@@ -337,6 +354,7 @@ export const {
     closeTaskDetailForm,
     createTask,
     updatedeleteConfirmationModal,
+    updatecreateEditLabelModal,
     updateaddTaskModal,
     updateappState,
 } = tasksSlice.actions

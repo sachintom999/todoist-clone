@@ -31,11 +31,17 @@ const AddForm = () => {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
+    const clearForm = () => {
+        setTitle("")
+        setDescription("")
+    }
+
     const dispatch = useDispatch()
     const handleSubmit = e => {
         e.preventDefault()
-        console.log("form submit", { title, description })
+        setShowForm(false)
         dispatch(createTask({ title, description }))
+        clearForm()
     }
 
     return (
@@ -51,7 +57,7 @@ const AddForm = () => {
                     }}
                     onClick={() => {
                         // dispatch(decrement())
-                        dispatch(increment())
+                        // dispatch(increment())
                         setShowForm(true)
 
                         setIsHovered(false)

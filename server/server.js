@@ -8,6 +8,8 @@ const authRoutes = require("./routes/authRoutes")
 const commentRoutes = require("./routes/commentRoutes")
 const projectRoutes = require("./routes/projectRoutes")
 const favouriteRoutes = require("./routes/favouriteRoutes")
+const labelRoutes = require("./routes/labelRoutes")
+const { getTodayTasks, getInboxTasks } = require("./controllers/taskController")
 
 const app = express()
 app.use(cors())
@@ -19,10 +21,18 @@ app.use("/api/auth", authRoutes)
 app.use("/api/comments", commentRoutes)
 app.use("/api/projects", projectRoutes)
 app.use("/api/favourites", favouriteRoutes)
+app.use("/api/labels", labelRoutes)
 
 app.get("/", (req, res) => {
+    console.log("req", req)
+    console.log("req.params", req.params)
+    console.log("req.body", req.body)
     return res.json({ msg: null })
 })
+app.get("/today", getTodayTasks)
+app.get("/inbox", getInboxTasks)
+app.get("/project", getInboxTasks)
+
 app.post("/", (req, res) => {
     return res.json({ msg: 123 })
 })
