@@ -33,7 +33,7 @@ const GlobalKeyboardShortcuts = () => {
         }
     }, [keysPressed])
 
-    return <div>Global Keyboard Shortcuts Example</div>
+    return <div></div>
 }
 
 export default GlobalKeyboardShortcuts

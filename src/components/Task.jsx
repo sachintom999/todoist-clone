@@ -120,7 +120,7 @@ const Task = ({
                     <BsCalendar3 fontSize={10} className="inline" />{" "}
                     {new Date(dueDate).toLocaleString("en-US", options)}
                 </span>
-                <span>{project.name}</span>
+                <span>{project?.name}</span>
                 {section?.name && <span>/{section?.name}</span>}
 
                 {labels.length > 0 ? <LabelList labels={labels} /> : null}

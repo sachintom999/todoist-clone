@@ -5,8 +5,17 @@ import { FaStar } from "react-icons/fa"
 
 import { GoSearch } from "react-icons/go"
 import { GrHomeRounded } from "react-icons/gr"
+import { updateaddTaskModal } from "../redux/tasks"
+import { useDispatch } from "react-redux"
 
+import { useSelector } from "react-redux"
 const Topbar = () => {
+    const dispatch = useDispatch()
+
+    const { appState } = useSelector(state => state.tasks)
+
+    console.log("appState", appState)
+
     return (
         <div className="w-full bg-gray-100   h-10 p-2 flex justify-between text-xs font-light ">
             <div className="flex justify-around">
@@ -17,12 +26,24 @@ const Topbar = () => {
                 <input placeholder="Search" />
             </div>
 
+            {appState.online ? "Online" : "Offline"}
+
             <div className="flex justify-around">
                 <button className="flex">
                     <FaStar className="text-yellow-500" fontSize={15} />
                     <span>Upgrade to Pro</span>
                 </button>
-                <AiOutlinePlus fontSize={20} />
+                <AiOutlinePlus
+                    fontSize={20}
+                    onClick={() => {
+                        dispatch(
+                            updateaddTaskModal({
+                                show: true,
+                                // data: { title, _id },
+                            })
+                        )
+                    }}
+                />
                 <BsCheckCircle fontSize={20} />
                 <span>8/5</span>
                 <BsQuestionCircle fontSize={20} />

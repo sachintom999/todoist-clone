@@ -1,13 +1,12 @@
 import { useState } from "react"
 import { AiFillPlusCircle, AiOutlinePlus } from "react-icons/ai"
-import { increment } from "../redux/tasks"
+import { createTask, increment } from "../redux/tasks"
 
 import { AiOutlineClose, AiOutlineTag } from "react-icons/ai"
 import { BsCalendar3, BsFlag } from "react-icons/bs"
 import { IoMdSend } from "react-icons/io"
 import { MdOutlineMoreHoriz } from "react-icons/md"
-import { useDispatch, useSelector } from "react-redux"
-import { decrement } from "../redux/tasks"
+import { useDispatch } from "react-redux"
 
 const AddForm = () => {
     const [isHovered, setIsHovered] = useState(false)
@@ -36,7 +35,7 @@ const AddForm = () => {
     const handleSubmit = e => {
         e.preventDefault()
         console.log("form submit", { title, description })
-        // dispatch(createTask({ title, description }))
+        dispatch(createTask({ title, description }))
     }
 
     return (

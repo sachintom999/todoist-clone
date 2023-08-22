@@ -32,10 +32,16 @@ async function insertSampleData() {
     try {
         // Insert User
         const user = await User.create({
-            email: "sam@example.com",
+            email: "john@example.com",
+            firstName: "John",
+            lastName: "Doe",
+            image: "https://e1.pxfuel.com/desktop-wallpaper/928/355/desktop-wallpaper-sm-on-twitter-random-people.jpg",
         })
         const user2 = await User.create({
-            email: "tim@example.com",
+            email: "sam@example.com",
+            firstName: "Sam",
+            lastName: "Matt",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6M0aYu0alq3r23-_PeSwmQKYZb-8LALxkVZSmTNjZ5oZ7qQJTe0lTJqZfDW5gnGwsnBM&usqp=CAU",
         })
 
         // Insert Labels

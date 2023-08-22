@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import { pl } from "date-fns/locale"
 
 // export const updateTask = createAsyncThunk(
 //     "tasks/updateTask",
@@ -18,11 +17,28 @@ import { pl } from "date-fns/locale"
 export const tasksSlice = createSlice({
     name: "tasks",
     initialState: {
+        appState: {
+            online: navigator.onLine,
+        },
+
+        newTaskSettings: {
+            project: null,
+            section: null,
+            parentTask: null,
+            tags: [],
+            dueDate: null,
+            priority: null,
+        },
+
         deleteConfirmationModal: {
             show: false,
             data: {},
         },
         cornerModal: {
+            show: false,
+            data: {},
+        },
+        addTaskModal: {
             show: false,
             data: {},
         },
@@ -49,23 +65,19 @@ export const tasksSlice = createSlice({
         user: null,
     },
     reducers: {
+        updateappState: (state, action) => {},
+
         updatedeleteConfirmationModal: (state, action) => {
             console.log("49 ", action.payload)
             state.deleteConfirmationModal = action.payload
         },
 
-        increment: state => {
-            state.anyFormOpen = true
-        },
-        decrement: state => {
-            state.anyFormOpen = false
-        },
-        reset: state => {
-            state.noOfOpenForms = 0
-        },
-
         updateNewTaskForm: (state, action) => {
             state.newTaskForm = action.payload
+        },
+
+        updateaddTaskModal: (state, action) => {
+            state.addTaskModal = action.payload
         },
 
         updatetaskDetailModalState: (state, action) => {
@@ -325,6 +337,8 @@ export const {
     closeTaskDetailForm,
     createTask,
     updatedeleteConfirmationModal,
+    updateaddTaskModal,
+    updateappState,
 } = tasksSlice.actions
 
 export default tasksSlice.reducer
