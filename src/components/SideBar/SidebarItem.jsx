@@ -12,15 +12,15 @@ const SidebarItem = ({ item, itemType }) => {
                 ></span>
             )
         }
-        return <AiOutlineTag fontSize={12} className="text-gray-400 mr-2" />
+        return <AiOutlineTag fontSize={12} className="text-gray-400 mr-2" style={{ color: item?.color }}  />
     }
 
     return (
         <p
             key={item._id}
-            className="text-xs flex items-center w-full justify-start  px-2 py-1 rounded-md cursor-pointer hover:bg-slate-700"
+            className="text-xs flex items-center w-full justify-start  p-2 rounded-md cursor-pointer hover:bg-slate-700"
             onClick={() => {
-                navigate(`/${itemType}/${item.name.toLowerCase()}`)
+                navigate(`/${itemType}/${item._id}`)
             }}
         >
             {getSymbol()}

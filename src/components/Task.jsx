@@ -100,7 +100,7 @@ const Task = ({
                 <ReactMarkdown className="text-xs">{desc}</ReactMarkdown>
             </div>
             <div className=" flex justify-between mt-2 text-xs items-center">
-                {subtasks.length > 0 && (
+                {subtasks?.length > 0 && (
                     <>
                         <span>
                             <AiOutlineBranches
@@ -123,7 +123,7 @@ const Task = ({
                 <span>{project?.name}</span>
                 {section?.name && <span>/{section?.name}</span>}
 
-                {labels.length > 0 ? <LabelList labels={labels} /> : null}
+                {labels?.length > 0 ? <LabelList labels={labels} /> : null}
             </div>
         </div>
     )

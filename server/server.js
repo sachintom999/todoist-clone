@@ -9,7 +9,9 @@ const commentRoutes = require("./routes/commentRoutes")
 const projectRoutes = require("./routes/projectRoutes")
 const favouriteRoutes = require("./routes/favouriteRoutes")
 const labelRoutes = require("./routes/labelRoutes")
-const { getTodayTasks, getInboxTasks } = require("./controllers/taskController")
+const { getTodayTasks, } = require("./controllers/taskController")
+const { getTasksUnderLabel } = require("./controllers/labelController")
+const { getProjectTasks, getProjectTasksGroupedBySections, getInboxTasks } = require("./controllers/projectController")
 
 const app = express()
 app.use(cors())
@@ -24,18 +26,26 @@ app.use("/api/favourites", favouriteRoutes)
 app.use("/api/labels", labelRoutes)
 
 app.get("/", (req, res) => {
-    console.log("req", req)
-    console.log("req.params", req.params)
-    console.log("req.body", req.body)
+    // console.log("req", req)
+    // console.log("req.params", req.params)
+    // console.log("req.body", req.body)
     return res.json({ msg: null })
 })
-app.get("/today", getTodayTasks)
-app.get("/inbox", getInboxTasks)
-app.get("/project", getInboxTasks)
+// app.get("/today", getTodayTasks)
+// app.get("/inbox", getInboxTasks)
+// app.get("/project", getInboxTasks)
+// app.get("/labels", getTasksUnderLabel)
 
-app.post("/", (req, res) => {
-    return res.json({ msg: 123 })
-})
+
+
+
+
+
+// app.get("/temp", getInboxTasks)
+
+// app.post("/", (req, res) => {
+//     return res.json({ msg: 123 })
+// })
 
 // DB
 

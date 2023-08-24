@@ -47,7 +47,7 @@ const iconMappings = {
     alert: AiOutlinePlus,
     alert: BiCategory,
     alert: BsCalendar3,
-    alert: AiOutlinePlus,
+    plus: AiOutlinePlus,
     category: BiCategory,
     calendar: BsCalendar3,
     inbox: BsInbox,

@@ -12,7 +12,8 @@ const FavouriteList = () => {
     }, [])
 
     return (
-        <div>
+        <div className="mt-4">
+            <p className="textfont-bold text-sm my-4">Favourites</p>
             {favourites?.projects?.map(project => (
                 <SidebarItem
                     key={project._id}

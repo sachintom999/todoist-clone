@@ -6,10 +6,12 @@ import { NavLink } from "react-router-dom"
 import { sideBarOptions } from "../config/menu"
 import ProjectList from "./SideBar/ProjectList"
 import FavouriteList from "./SideBar/FavouriteList"
+
+import getIcons from '../utils/getIcons'
 const Sidebar = () => {
     const getIcon = route => {
         switch (route) {
-            case "/inbox":
+            case "/project/inbox":
                 return <BsInbox fontSize={20} className="text-blue-400" />
             case "/today":
                 return <MdToday fontSize={20} className="text-green-800" />
@@ -22,16 +24,15 @@ const Sidebar = () => {
 
     const activeClasses = isActive => {
         if (isActive) {
-            return `flex bg-gray-700 justify-start items-center text-gray-200  `
+            return `flex bg-gray-700 justify-start items-center text-gray-200 p-2 rounded-md text-xs `
         } else {
-            return `flex bg-transparent  justify-start items-center text-gray-200`
+            return `flex bg-transparent  justify-start items-center text-gray-200 p-2 rounded-md text-xs`
         }
     }
 
     return (
-        <div className="w-3/6  bg-dark3 text-gray-100 h-screen px-3 py-5 ">
+        <div className="w-2/12 flex-1  bg-dark3 text-gray-100  px-3 py-5  flex flex-col">
             {sideBarOptions.map(item => {
-                // console.log("item", iten)
                 return (
                     <NavLink
                         key={item.label}
@@ -40,24 +41,24 @@ const Sidebar = () => {
                             return activeClasses(isActive)
                         }}
                     >
-                        {/* <BsInbox fontSize={20} className="text-blue-400" /> */}
                         {getIcon(item.route)}
 
-                        <p className="text-sm ml-2">{item.label}</p>
+                        <p className="text-xs ml-2">{item.label}</p>
                     </NavLink>
                 )
             })}
 
-            <p>Favourites</p>
+            
             <FavouriteList />
-
-            <p>Projects</p>
             <ProjectList />
 
-            <div className="flex">
-                <AiOutlinePlus fontSize={20} />
-                Add workspace BETA
+            <div className="mt-auto text-sm flex items-center mb-4">
+                {getIcons('plus',{ className : "mr-2"})}Add workspace
             </div>
+
+            
+
+
         </div>
     )
 }

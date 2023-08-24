@@ -14,10 +14,10 @@ const Topbar = () => {
 
     const { appState } = useSelector(state => state.tasks)
 
-    console.log("appState", appState)
+    // console.log("appState", appState)
 
     return (
-        <div className="w-full bg-gray-100   h-10 p-2 flex justify-between text-xs font-light ">
+        <div className="w-full bg-gray-100 ` h-10 p-2 flex justify-between text-xs font-light ">
             <div className="flex justify-around">
                 <AiOutlineMenu fontSize={20} />
                 <GrHomeRounded fontSize={20} />

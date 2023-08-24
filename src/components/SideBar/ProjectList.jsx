@@ -12,7 +12,8 @@ const ProjectList = () => {
     }, [])
 
     return (
-        <div>
+        <div >
+            <p className="textfont-bold text-sm my-4">Projects</p>
             {projects?.map(project => (
                 <SidebarItem
                     key={project._id}

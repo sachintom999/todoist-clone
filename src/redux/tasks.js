@@ -48,6 +48,8 @@ export const tasksSlice = createSlice({
             data: {},
         },
 
+        pageTasks: [],
+
         count: 0,
         addTaskFormOpen: false,
         taskDetailOpen: false,
@@ -125,7 +127,7 @@ export const tasksSlice = createSlice({
                 })
         },
         deleteTask: (state, action) => {
-            console.log("action.payload", action.payload)
+            // console.log("action.payload", action.payload)
             const { taskId } = action.payload
 
             axios
@@ -219,15 +221,25 @@ export const tasksSlice = createSlice({
             state.taskList = action.payload
             state.appState.loading = false
         })
+        builder.addCase(getProjectTasks.fulfilled, (state, action) => {
+            console.log(" getProjectTasks >> action.payload", action.payload)
+
+            state.pageTasks = action.payload
+        })
+        builder.addCase(getInboxTasks.fulfilled, (state, action) => {
+            console.log(" getInboxTasks >> action.payload", action.payload)
+
+            state.pageTasks = action.payload
+        })
         builder.addCase(getAllLabels.fulfilled, (state, action) => {
             state.labels = action.payload
         })
         builder.addCase(fetchAllProjects.fulfilled, (state, action) => {
-            console.log("action.payload", action.payload)
+            // console.log("action.payload", action.payload)
             state.projects = action.payload
         })
         builder.addCase(fetchAllFavourites.fulfilled, (state, action) => {
-            console.log("action.payload", action.payload)
+            // console.log("action.payload", action.payload)
             state.favourites = action.payload
         })
         builder.addCase(fetchTaskDetail.fulfilled, (state, action) => {
@@ -239,8 +251,7 @@ export const tasksSlice = createSlice({
         })
 
         builder.addCase(updateTask.fulfilled, (state, action) => {
-            console.log("action.payload", action.payload)
-
+            // console.log("action.payload", action.payload)
             // state.taskDetailModalContents = action.payload
         })
 
@@ -258,6 +269,25 @@ export const fetchAllTasks = createAsyncThunk(
     "tasks/fetchAllTasks",
     async () => {
         const response = await axios.get("http://localhost:3000/api/tasks")
+        return response.data
+    }
+)
+
+export const getProjectTasks = createAsyncThunk(
+    "tasks/getProjectTasks",
+    async id => {
+        const response = await axios.get(
+            `http://localhost:3000/api/projects/${id}/tasks`
+        )
+        return response.data
+    }
+)
+export const getInboxTasks = createAsyncThunk(
+    "tasks/getInboxTasks",
+    async () => {
+        const response = await axios.get(
+            `http://localhost:3000/api/projects/inbox-tasks`
+        )
         return response.data
     }
 )

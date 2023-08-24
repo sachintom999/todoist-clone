@@ -23,17 +23,23 @@ const App = () => {
             {appState.loading ? (
                 <Loading />
             ) : (
-                <div>
-                    <AllModals />
-                    <Topbar />
+                <div className="w-screen h-screen">
+                    {/* <AllModals /> */}
 
-                    <div className="flex">
+                    <div className="flex flex-col">
+
+                    <Topbar />
+                    <div className="flex flex-1" >
                         <Router>
                             {/* <GlobalKeyboardShortcuts /> */}
-                            {/* <Sidebar /> */}
+                            <Sidebar />
                             <Home />
                         </Router>
                     </div>
+
+                    </div>
+
+
                 </div>
             )}
         </>

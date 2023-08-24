@@ -1,7 +1,7 @@
 import { BiCategory } from "react-icons/bi"
 const sideBarOptions = [
     {
-        route: "/inbox",
+        route: "/project/inbox",
         label: "Inbox",
     },
     {

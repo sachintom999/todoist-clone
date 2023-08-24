@@ -15,6 +15,8 @@ import {
 import PriorityModal from "./PriorityModal"
 import Subtask from "./Subtask"
 
+import getIcons from '../utils/getIcons'
+
 import { getPriorityColor } from "../config/helpers"
 import AddForm from "./AddForm"
 import CommentsContainer from "./CommentsContainer"
@@ -128,7 +130,7 @@ const TaskDetail = () => {
                         dispatch(closeTaskDetailForm())
                     }}
                 >
-                    close
+                    {getIcons('close', {className:"cursor-pointer"})}
                 </span>
             </div>
             <div className="w-full flex h-full ">

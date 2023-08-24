@@ -217,30 +217,31 @@ const getTodayTasks = async (req, res) => {
     }
 }
 
-const getInboxTasks = async (req, res) => {
-    let project
+// const getInboxTasks = async (req, res) => {
+//     let project
 
-    const currentUser = await User.findOne({})
-    project = await Project.getDefaultProject(currentUser._id)
+//     const currentUser = await User.findOne({})
+//     project = await Project.getDefaultProject(currentUser._id)
 
-    try {
-        const filters = {
-            project: project._id,
-        }
+//     try {
+//         const filters = {
+//             project: project._id,
+//             parentTask: null
+//         }
 
-        const populateList = []
+//         const populateList = []
 
-        const tasks = await Task.getTasksByFilterAndPopulate(
-            filters,
-            populateList
-        )
+//         const tasks = await Task.getTasksByFilterAndPopulate(
+//             filters,
+//             populateList
+//         )
 
-        return res.status(200).json(tasks)
-    } catch (error) {
-        console.error(" taskController  error at line 199 ::", error)
-        return res.status(500).json({ error })
-    }
-}
+//         return res.status(200).json(tasks)
+//     } catch (error) {
+//         console.error(" taskController  error at line 199 ::", error)
+//         return res.status(500).json({ error })
+//     }
+// }
 
 module.exports = {
     createTask,
@@ -249,5 +250,5 @@ module.exports = {
     deleteTask,
     updateTask,
     getTodayTasks,
-    getInboxTasks,
+    // getInboxTasks,
 }

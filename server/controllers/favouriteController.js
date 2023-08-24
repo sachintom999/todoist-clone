@@ -12,7 +12,7 @@ const getFavourites = async (req, res) => {
     const favoriteLabels = await Label.find({
         // user: userId,
         favourite: true,
-    }).select("_id name")
+    }).select("_id name color")
 
     const response = {
         projects: favoriteProjects,
