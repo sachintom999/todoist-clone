@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Filters, Main,  } from "../components"
 
 import Inbox from "../components/Inbox1"
-import Upcoming2 from "../components/Upcoming2"
+import Upcoming2 from "../components/Upcoming3"
 
 const Home = () => {
     const { taskList } = useSelector(state => state.tasks)
