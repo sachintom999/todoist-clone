@@ -162,7 +162,7 @@ const getProjectTasks = async (req, res) => {
 
     try {
         const tasks = await Task.getProjectTasksGroupedBySections(projectId)
-        console.log('tasks', tasks)
+        console.log('tasks🟢', tasks)
 
         return res.status(200).json(tasks)
     } catch (error) {

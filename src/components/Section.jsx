@@ -17,9 +17,6 @@ const Section = ({ title, tasks }) => {
                     return (
                         <Task
                             key={task._id}
-                            // title={task.title}
-                            // desc={task.desc}
-                            // id={task._id}
                             task={task}
                         />
                     )

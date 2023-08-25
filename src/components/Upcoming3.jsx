@@ -251,6 +251,9 @@ const UpcomingDynamic = () => {
     return (
         <div className="w-screen h-screen">
             <DragDropContext onDragEnd={onDragEnd}>
+                
+                
+                
                 {lists.map(list => (
                     <Droppable key={list.id} droppableId={list.id}>
                         {(provided, snapshot) => {
@@ -295,6 +298,10 @@ const UpcomingDynamic = () => {
                         }}
                     </Droppable>
                 ))}
+
+
+
+                
             </DragDropContext>
         </div>
     )

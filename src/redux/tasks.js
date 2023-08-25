@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import { replaceKeys } from "../config/helpers"
 
 // export const updateTask = createAsyncThunk(
 //     "tasks/updateTask",
@@ -222,12 +223,21 @@ export const tasksSlice = createSlice({
             state.appState.loading = false
         })
         builder.addCase(getProjectTasks.fulfilled, (state, action) => {
-            console.log(" getProjectTasks >> action.payload", action.payload)
+            // console.log(" getProjectTasks >> action.payload", action.payload)
 
-            state.pageTasks = action.payload
+
+            const transformedData = replaceKeys(action.payload)
+
+            // console.log('transformedData', transformedData)
+
+
+
+
+
+            state.pageTasks = replaceKeys(action.payload)
         })
         builder.addCase(getInboxTasks.fulfilled, (state, action) => {
-            console.log(" getInboxTasks >> action.payload", action.payload)
+            
 
             state.pageTasks = action.payload
         })

@@ -71,7 +71,62 @@ TaskSchema.statics.getTasksByFilterAndPopulate = async function (
     }
 }
 
-TaskSchema.statics.getProjectTasksGroupedBySections = async function(projectId) {
+// TaskSchema.statics.getProjectTasksGroupedBySections = async function(projectId) {
+//     try {
+//         const tasks = await this.aggregate([
+//             {
+//                 $match: {
+//                     project: new mongoose.Types.ObjectId(projectId),
+//                     parentTask: null,
+//                 },
+//             },
+//             {
+//                 $lookup: {
+//                     from: "sections",
+//                     localField: "section",
+//                     foreignField: "_id",
+//                     as: "sectionInfo",
+//                 },
+//             },
+//             {
+//                 $unwind: {
+//                     path: "$sectionInfo",
+//                     preserveNullAndEmptyArrays: true,
+//                 },
+//             },
+//             {
+//                 $group: {
+//                     _id: {
+//                         sectionId: "$sectionInfo._id",
+//                         sectionName: {
+//                             $ifNull: ["$sectionInfo.name", "(No section)"],
+//                         },
+//                     },
+//                     tasks: {
+//                         $push: {
+//                             _id: "$_id",
+//                             title: "$title",
+//                             desc: "$desc",
+//                             dueDate: "$dueDate",
+//                         },
+//                     },
+//                 },
+//             },
+//             {
+//                 $sort: { "_id.sectionName": 1 },
+//             },
+//         ])
+
+//         return tasks
+//     } catch (err) {
+//         console.error(err)
+//         return null
+//     }
+// }
+
+TaskSchema.statics.getProjectTasksGroupedBySections = async function (
+    projectId
+) {
     try {
         const tasks = await this.aggregate([
             {
@@ -97,7 +152,12 @@ TaskSchema.statics.getProjectTasksGroupedBySections = async function(projectId) 
             {
                 $group: {
                     _id: {
-                        sectionId: "$sectionInfo._id",
+                        sectionId: {
+                            $ifNull: [
+                                "$sectionInfo._id",
+                                new mongoose.Types.ObjectId("999999999999"),
+                            ],
+                        },
                         sectionName: {
                             $ifNull: ["$sectionInfo.name", "(No section)"],
                         },

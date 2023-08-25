@@ -8,3 +8,21 @@ export const getPriorityColor = priority => {
 
     return priorityClass[priority]
 }
+
+
+
+
+export const  replaceKeys = (obj) => {
+    if (Array.isArray(obj)) {
+        return obj.map(item => replaceKeys(item));
+    } else if (obj !== null && typeof obj === 'object') {
+        const newObj = {};
+        for (const key in obj) {
+            const newKey = key === '_id' ? 'id' : key === 'sectionId' ? 'id' : key;
+            newObj[newKey] = replaceKeys(obj[key]);
+        }
+        return newObj;
+    } else {
+        return obj;
+    }
+}
