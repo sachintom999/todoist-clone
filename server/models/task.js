@@ -17,6 +17,10 @@ const TaskSchema = new Schema(
         section: { type: Schema.Types.ObjectId, ref: "Section" },
         user: { type: Schema.Types.ObjectId, ref: "TUser" },
         parentTask: { type: Schema.Types.ObjectId, ref: "Task", default: null },
+
+        order: { type: Number, required: true }, // Numerical order
+        prevTask: { type: Schema.Types.ObjectId, ref: "Task" }, // Reference to previous task
+        nextTask: { type: Schema.Types.ObjectId, ref: "Task" }, // Reference to next task
     },
     { timestamps: true }
 )

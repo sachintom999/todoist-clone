@@ -16,7 +16,7 @@ const Task = ({
     task: {
         title,
         desc,
-        _id,
+        id:_id,
         dueDate,
         project,
         completedSubtasksCount,
@@ -59,6 +59,7 @@ const Task = ({
         <div
             className="bg-dark1 p-3 mt-4 mb-4 cursor-pointer rounded-md border-solid border-slate-700 shadow-gray-700 shadow-sm border"
             onClick={() => {
+                console.log("first")
                 dispatch(fetchTaskDetail(_id)).then(() => {
                     dispatch(openTaskDetailForm(_id))
                 })

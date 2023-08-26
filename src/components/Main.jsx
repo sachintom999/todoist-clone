@@ -79,6 +79,7 @@ const Main = ({ title, taskList }) => {
     )
 
     const [lists, setLists] = useState(pageTasks)
+    const [showAddSectionForm, setShowAddSectionForm] = useState(null)
 
     useEffect(() => {
         // dispatch(getTodayTasks(taskList))
@@ -95,7 +96,6 @@ const Main = ({ title, taskList }) => {
 
         dispatch(getProjectTasks(projectId))
         setLists(pageTasks)
-        
     }, [projectId])
 
     const onDragEnd = result => {
@@ -123,10 +123,7 @@ const Main = ({ title, taskList }) => {
                 )
             })
 
-            console.log('newList', lists)
-
-
-
+            console.log("newList", lists)
         } else {
             const sourceListToUpdate = lists.find(list => {
                 console.log(list.id.id, source.droppableId)
@@ -154,7 +151,7 @@ const Main = ({ title, taskList }) => {
                 )
             })
 
-            console.log('newList', lists)
+            console.log("newList", lists)
         }
     }
 
@@ -170,58 +167,84 @@ const Main = ({ title, taskList }) => {
 
             <div className="flex">
                 <DragDropContext onDragEnd={onDragEnd}>
-                    {lists?.map(section => (
-                        <Droppable
-                            key={section.id.id}
-                            droppableId={section.id.id}
-                        >
-                            {(provided, snapshot) => {
-                                // console.log("lists", lists)
-                                return (
-                                    <div
-                                        ref={provided.innerRef}
-                                        style={getListStyle(
-                                            snapshot.isDraggingOver
-                                        )}
-                                    >
-                                        <p className="text-center text-sm font-bold">
-                                            {section.id.sectionName}
-                                        </p>
-                                        {section?.tasks?.map((task, index) => {
-                                            return (
-                                                <Draggable
-                                                    key={task.id}
-                                                    draggableId={task.id}
-                                                    index={index}
-                                                >
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={
-                                                                provided.innerRef
+                    {lists?.map((section, sectionIndex) => (
+                        <>
+                            <Droppable
+                                key={section.id.id}
+                                droppableId={section.id.id}
+                            >
+                                {(provided, snapshot) => {
+                                    // console.log("lists", lists)
+                                    return (
+                                        <div
+                                            ref={provided.innerRef}
+                                            style={getListStyle(
+                                                snapshot.isDraggingOver
+                                            )}
+                                        >
+                                            <p className="text-center text-sm font-bold">
+                                                {section.id.sectionName}
+                                            </p>
+                                            {section?.tasks?.map(
+                                                (task, index) => {
+                                                    return (
+                                                        <Draggable
+                                                            key={task.id}
+                                                            draggableId={
+                                                                task.id
                                                             }
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            style={getItemStyle(
-                                                                snapshot.isDragging,
-                                                                provided
-                                                                    .draggableProps
-                                                                    .style
-                                                            )}
+                                                            index={index}
                                                         >
-                                                            <Task
-                                                                key={task._id}
-                                                                task={task}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            )
-                                        })}
-                                        {provided.placeholder}
-                                    </div>
-                                )
-                            }}
-                        </Droppable>
+                                                            {(
+                                                                provided,
+                                                                snapshot
+                                                            ) => (
+                                                                <div
+                                                                    ref={
+                                                                        provided.innerRef
+                                                                    }
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                    style={getItemStyle(
+                                                                        snapshot.isDragging,
+                                                                        provided
+                                                                            .draggableProps
+                                                                            .style
+                                                                    )}
+                                                                >
+                                                                    <Task
+                                                                        key={
+                                                                            task._id
+                                                                        }
+                                                                        task={
+                                                                            task
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                }
+                                            )}
+                                            {provided.placeholder}
+                                        </div>
+                                    )
+                                }}
+                            </Droppable>
+
+                            <VerticalBar
+                                setShowAddSectionForm={setShowAddSectionForm}
+                                sectionIndex={sectionIndex}
+                            />
+
+                            {showAddSectionForm == sectionIndex && (
+                                <AddSectionForm
+                                    setShowAddSectionForm={
+                                        setShowAddSectionForm
+                                    }
+                                />
+                            )}
+                        </>
                     ))}
                 </DragDropContext>
 
@@ -241,3 +264,50 @@ const Main = ({ title, taskList }) => {
 }
 
 export default Main
+
+const VerticalBar = ({ setShowAddSectionForm, sectionIndex }) => {
+    return (
+        <div className="group">
+
+        <div
+            className=" bg-red-600  cursor-pointer  relative invisible group-hover:visible"
+            onClick={() => {
+                setShowAddSectionForm(sectionIndex)
+            }}
+            style={{ width: "5px" }}
+        >
+            <p className="absolute top-1/2 -left-9 py-2 rounded-md text-xs w-20 text-center bg-black text-red-600  ">
+                Add section
+            </p>
+        </div>
+        </div>
+
+    )
+}
+
+const AddSectionForm = ({ setShowAddSectionForm }) => {
+    return (
+        <div className="w-64 p-2 text-xs ">
+            <input
+                type="text"
+                name=""
+                id=""
+                className="w-full rounded-md text-xs"
+                placeholder="Name this section"
+            />
+            <div className="mt-2 flex items-center">
+                <button className="p-2 bg-red-800 text-white rounded-md hover:opacity-80 transition delay-75 font-bold">
+                    Add section
+                </button>
+                <span
+                    className="ml-4 hover:underline cursor-pointer"
+                    onClick={() => {
+                        setShowAddSectionForm(null)
+                    }}
+                >
+                    Cancel
+                </span>
+            </div>
+        </div>
+    )
+}
