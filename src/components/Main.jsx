@@ -95,7 +95,7 @@ const Main = ({ title, taskList }) => {
 
         dispatch(getProjectTasks(projectId))
         setLists(pageTasks)
-        console.log(" again..lists", lists)
+        
     }, [projectId])
 
     const onDragEnd = result => {
@@ -122,6 +122,11 @@ const Main = ({ title, taskList }) => {
                         : list
                 )
             })
+
+            console.log('newList', lists)
+
+
+
         } else {
             const sourceListToUpdate = lists.find(list => {
                 console.log(list.id.id, source.droppableId)
@@ -148,6 +153,8 @@ const Main = ({ title, taskList }) => {
                         : list
                 )
             })
+
+            console.log('newList', lists)
         }
     }
 
