@@ -234,3 +234,5 @@ deleteData().then(() => {
     // After deleting data, insert sample data
     insertSampleData()
 })
+
+

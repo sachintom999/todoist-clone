@@ -96,6 +96,10 @@ const Main = ({ title, taskList }) => {
 
         dispatch(getProjectTasks(projectId))
         setLists(pageTasks)
+        console.log('lists', lists)
+
+
+
     }, [projectId])
 
     const onDragEnd = result => {

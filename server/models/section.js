@@ -9,7 +9,7 @@ const sectionSchema = new Schema(
             ref: "Project",
             required: true,
         },
-        tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
+        
     },
     { timestamps: true }
 )
