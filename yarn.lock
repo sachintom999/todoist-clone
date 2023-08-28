@@ -464,7 +464,7 @@
 
 "@reduxjs/toolkit@^1.9.5":
   version "1.9.5"
-  resolved "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-1.9.5.tgz"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.9.5.tgz#d3987849c24189ca483baa7aa59386c8e52077c4"
   integrity sha512-Rt97jHmfTeaxL4swLRNPD/zV4OxTes4la07Xc4hetpUW/vc75t5m1ANyxG6ymnEQ2FsLQsoMlYB2vV1sO3m8tQ==
   dependencies:
     immer "^9.0.21"
@@ -996,7 +996,7 @@ emoji-mart@^5.5.2:
 
 emoji-picker-react@^4.4.11:
   version "4.4.11"
-  resolved "https://registry.npmjs.org/emoji-picker-react/-/emoji-picker-react-4.4.11.tgz"
+  resolved "https://registry.yarnpkg.com/emoji-picker-react/-/emoji-picker-react-4.4.11.tgz#82732164f8a2354428f57db3f391c5797beff3ce"
   integrity sha512-HPQd0mt8l4So8YMBWSwWmCRTMBGLyxVIevr3/4dvVLWlXfsakpwcDgtbNWialCSw/aWlpBchsVdr1asMZ9Dmbg==
   dependencies:
     clsx "^1.2.1"
@@ -2405,7 +2405,7 @@ react-beautiful-dnd@^13.1.1:
 
 react-circular-progressbar@^2.1.0:
   version "2.1.0"
-  resolved "https://registry.npmjs.org/react-circular-progressbar/-/react-circular-progressbar-2.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/react-circular-progressbar/-/react-circular-progressbar-2.1.0.tgz#99e5ae499c21de82223b498289e96f66adb8fa3a"
   integrity sha512-xp4THTrod4aLpGy68FX/k1Q3nzrfHUjUe5v6FsdwXBl3YVMwgeXYQKDrku7n/D6qsJA9CuunarAboC2xCiKs1g==
 
 react-dom@^18.2.0:
@@ -2418,7 +2418,7 @@ react-dom@^18.2.0:
 
 react-icons@^4.10.1:
   version "4.10.1"
-  resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.10.1.tgz"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.1.tgz#3f3b5eec1f63c1796f6a26174a1091ca6437a500"
   integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
 
 react-is@^16.13.1, react-is@^16.7.0:
@@ -2471,7 +2471,7 @@ react-redux@^7.2.0:
 
 react-redux@^8.1.2:
   version "8.1.2"
-  resolved "https://registry.npmjs.org/react-redux/-/react-redux-8.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-8.1.2.tgz#9076bbc6b60f746659ad6d51cb05de9c5e1e9188"
   integrity sha512-xJKYI189VwfsFc4CJvHqHlDrzyFTY/3vZACbE+rr/zQ34Xx1wQfB4OTOSeOSNrF6BDVe8OOdxIrAnMGXA3ggfw==
   dependencies:
     "@babel/runtime" "^7.12.1"
@@ -2503,7 +2503,7 @@ react-router@6.14.2:
 
 react-spinners@^0.13.8:
   version "0.13.8"
-  resolved "https://registry.npmjs.org/react-spinners/-/react-spinners-0.13.8.tgz"
+  resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.13.8.tgz#5262571be0f745d86bbd49a1e6b49f9f9cb19acc"
   integrity sha512-3e+k56lUkPj0vb5NDXPVFAOkPC//XyhKPJjvcGjyMNPWsBKpplfeyialP74G7H7+It7KzhtET+MvGqbKgAqpZA==
 
 react@^18.2.0:

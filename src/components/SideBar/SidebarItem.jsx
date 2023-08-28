@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { AiOutlineTag } from "react-icons/ai"
+import getIcon from "../../utils/getIcons"
 const SidebarItem = ({ item, itemType }) => {
     const navigate = useNavigate()
 
@@ -12,19 +13,33 @@ const SidebarItem = ({ item, itemType }) => {
                 ></span>
             )
         }
-        return <AiOutlineTag fontSize={12} className="text-gray-400 mr-2" style={{ color: item?.color }}  />
+        return (
+            <AiOutlineTag
+                fontSize={12}
+                className="text-gray-400 mr-2"
+                style={{ color: item?.color }}
+            />
+        )
     }
 
     return (
         <p
             key={item._id}
-            className="text-xs flex items-center w-full justify-start  p-2 rounded-md cursor-pointer hover:bg-slate-700"
+            className="group text-xs flex items-center w-full justify-start  p-2 rounded-md cursor-pointer hover:bg-slate-700"
             onClick={() => {
                 navigate(`/${itemType}/${item._id}`)
             }}
         >
             {getSymbol()}
             <span>{item.name}</span>
+            {getIcon("heartOff", {
+                fontSize: 10,
+                className: "ml-auto invisible group-hover:visible",
+                onClick: e => {
+                    e.stopPropagation()
+                    console.log("remove from favourites.. PENDING TO IMPLEMENT")
+                },
+            })}
         </p>
     )
 }

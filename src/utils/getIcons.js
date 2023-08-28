@@ -13,8 +13,8 @@ import {
 import {
     BiCategory,
     BiComment,
-    BiSolidUserCircle,
     BiInfoCircle,
+    BiSolidUserCircle,
 } from "react-icons/bi"
 import {
     BsCalendar3,
@@ -40,6 +40,7 @@ import {
     MdToday,
 } from "react-icons/md"
 import { TbSection } from "react-icons/tb"
+import { LuHeartOff } from "react-icons/lu"
 
 const iconMappings = {
     check: AiOutlineCheck,
@@ -81,6 +82,7 @@ const iconMappings = {
     check: BsCheck,
     arrowRight: MdKeyboardArrowRight,
     info: BiInfoCircle,
+    heartOff: LuHeartOff,
     // Add more mappings here
 }
 

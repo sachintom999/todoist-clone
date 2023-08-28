@@ -48,7 +48,12 @@ async function insertSampleData() {
         const wipLabel = await Label.create({
             name: "wip",
             user: user._id,
-            favourite:true
+            favourite: true,
+        })
+        const buyLabel = await Label.create({
+            name: "buy",
+            user: user._id,
+            favourite: true,
         })
 
         // Insert Projects
@@ -65,7 +70,7 @@ async function insertSampleData() {
             owner: user._id,
             color: "#11c023",
             sections: [],
-            favourite:true
+            favourite: true,
         })
 
         // Insert Sections
@@ -122,6 +127,7 @@ async function insertSampleData() {
             subtasks: [],
             user: user._id, // Assign the user
             dueDate: new Date(),
+            labels: [buyLabel._id, wipLabel._id],
         })
         const noSectionTask2 = await Task.create({
             title: "No Section 2",
@@ -138,7 +144,7 @@ async function insertSampleData() {
             subtasks: [],
             user: user._id, // Assign the user
             dueDate: new Date(),
-            section:healthSection._id
+            section: healthSection._id,
         })
         const financeTask = await Task.create({
             title: "finance tasks",
@@ -147,7 +153,7 @@ async function insertSampleData() {
             subtasks: [],
             user: user._id, // Assign the user
             dueDate: new Date(),
-            section:financeSection._id
+            section: financeSection._id,
         })
 
         const frontendSubtask = await Task.create({
@@ -208,20 +214,19 @@ async function insertSampleData() {
 
         await todoistCloneTask.save()
 
+        wipLabel.tasks.push(backendSubtask)
+        await wipLabel.save()
+
+        buyLabel.tasks.push(noSectionTask)
+        await buyLabel.save()
+
         console.log("Sample data inserted successfully.")
 
-
-        
         console.log(`inboxProject : ${inboxProject._id}`)
         console.log(`workProject : ${workProject._id}`)
-        
-        
+
         console.log(`${user.email} : ${user._id}`)
         // console.log(`${user2.email} : ${user2._id}`)
-
-
-
-
     } catch (error) {
         console.error("Error inserting sample data:", error)
     } finally {
@@ -234,5 +239,3 @@ deleteData().then(() => {
     // After deleting data, insert sample data
     insertSampleData()
 })
-
-

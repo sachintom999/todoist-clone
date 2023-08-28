@@ -13,7 +13,7 @@ const Filters = () => {
     }, [])
 
     return (
-        <div className="p-5">
+        <div className="w-screen h-screen">
             <h3 className="font-bold">Filters</h3>
             <h3 className="font-bold">Labels</h3>
             {labels.map(label => {

@@ -32,6 +32,8 @@ export const tasksSlice = createSlice({
             priority: null,
         },
 
+        labelTasks: {},
+
         deleteConfirmationModal: {
             show: false,
             data: {},
@@ -222,23 +224,19 @@ export const tasksSlice = createSlice({
             state.taskList = action.payload
             state.appState.loading = false
         })
+        builder.addCase(fetchLabelTasks.fulfilled, (state, action) => {
+            state.labelTasks = action.payload
+        })
         builder.addCase(getProjectTasks.fulfilled, (state, action) => {
             // console.log(" getProjectTasks >> action.payload", action.payload)
-
 
             const transformedData = replaceKeys(action.payload)
 
             // console.log('transformedData', transformedData)
 
-
-
-
-
             state.pageTasks = replaceKeys(action.payload)
         })
         builder.addCase(getInboxTasks.fulfilled, (state, action) => {
-            
-
             state.pageTasks = action.payload
         })
         builder.addCase(getAllLabels.fulfilled, (state, action) => {
@@ -320,6 +318,16 @@ export const getAllLabels = createAsyncThunk("tasks/getAllLabels", async () => {
     const response = await axios.get("http://localhost:3000/api/labels")
     return response.data
 })
+
+export const fetchLabelTasks = createAsyncThunk(
+    "tasks/fetchLabelTasks",
+    async labelId => {
+        const response = await axios.get(
+            `http://localhost:3000/api/labels/${labelId}/tasks`
+        )
+        return response.data
+    }
+)
 
 export const fetchTaskDetail = createAsyncThunk(
     "tasks/fetchTaskDetail",

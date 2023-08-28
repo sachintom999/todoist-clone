@@ -8,28 +8,26 @@ const getAllLabels = async (req, res) => {
     return res.status(200).json(labels)
 }
 
-
-
-const getTasksUnderLabel = async (req,res)=>{
+const getTasksUnderLabel = async (req, res) => {
     console.log("first")
 
     try {
-    
-        const {labelId} = req.body
-        console.log('req.body', req.body)
-        console.log('labelId', labelId)
-        const label = await Label.findById(labelId).populate("tasks")
-        console.log('label', label)
-        // const tasks = await label.tasks
-        return res.status(200).json(tasks)
-        
+        const { labelId } = req.params
+        console.log("req.params", req.params)
+        console.log("labelId", labelId)
+        const label = await Label.findById(labelId).populate({
+            path: "tasks",
+            populate: [
+                { path: "project" },
+                { path: "section" },
+                { path: "labels" },
+            ],
+        })
+
+        return res.status(200).json(label)
     } catch (error) {
-        console.error(' labelController  error at line 16 ::', error)
+        console.error(" labelController  error at line 16 ::", error)
         return res.status(500).json(error)
     }
-
-    
-    
-    
 }
 module.exports = { getAllLabels, getTasksUnderLabel }
