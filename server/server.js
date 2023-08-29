@@ -10,9 +10,13 @@ const projectRoutes = require("./routes/projectRoutes")
 const favouriteRoutes = require("./routes/favouriteRoutes")
 const sectionRoutes = require("./routes/sectionRoutes")
 const labelRoutes = require("./routes/labelRoutes")
-const { getTodayTasks, } = require("./controllers/taskController")
+const { getTodayTasks } = require("./controllers/taskController")
 const { getTasksUnderLabel } = require("./controllers/labelController")
-const { getProjectTasks, getProjectTasksGroupedBySections, getInboxTasks } = require("./controllers/projectController")
+const {
+    getProjectTasks,
+    getProjectTasksGroupedBySections,
+    getInboxTasks,
+} = require("./controllers/projectController")
 
 const app = express()
 app.use(cors())
@@ -38,12 +42,28 @@ app.get("/", (req, res) => {
 // app.get("/project", getInboxTasks)
 // app.get("/labels", getTasksUnderLabel)
 
+const Project = require("./models/project")
+app.get("/temp/:projectId", async (req, res) => {
+    console.log("first..")
+    const { projectId } = req.params
 
+    console.log("projectId", projectId)
 
+    const project = await Project.findById(projectId).populate({
+        path: "sections",
+        populate: {
+            path: "tasks",
+            model: "Task",
+        },
+    })
 
+    console.log("project", project)
+    return res.status(200).json(project)
 
-
-// app.get("/temp", getInboxTasks)
+    if (!project) {
+        return res.status(404).json({ message: "no project found" })
+    }
+})
 
 // app.post("/", (req, res) => {
 //     return res.json({ msg: 123 })

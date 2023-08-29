@@ -84,18 +84,19 @@ const Main = ({ title, taskList }) => {
     useEffect(() => {
         // dispatch(getTodayTasks(taskList))
 
-        console.log("🔴rendering...")
+        console.log("🔴rendering...", pageTasks)
+
 
         if (projectId) {
             dispatch(getProjectTasks(projectId))
 
-            setLists(pageTasks)
+            setLists(pageTasks?.sections)
         } else {
             dispatch(getInboxTasks())
         }
 
         dispatch(getProjectTasks(projectId))
-        setLists(pageTasks)
+        setLists(pageTasks?.sections)
         console.log('lists', lists)
 
 

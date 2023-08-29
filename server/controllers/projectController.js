@@ -17,7 +17,7 @@ const createProject = async (req, res) => {
     const projectDetails = req.body
     const owner = await User.findOne({})
     try {
-        const project = await Project.create({...projectDetails,owner})
+        const project = await Project.create({ ...projectDetails, owner })
         return res.status(200).json(project)
     } catch (error) {
         console.error(" error ", error)
@@ -167,21 +167,21 @@ const createProject = async (req, res) => {
 //     }
 // };
 
-const getProjectTasks = async (req, res) => {
-    console.log("/////", req.params)
-    const { projectId } = req.params
-    console.log("projectId", projectId)
+// const getProjectTasks = async (req, res) => {
+//     console.log("/////", req.params)
+//     const { projectId } = req.params
+//     console.log("projectId", projectId)
 
-    try {
-        const tasks = await Task.getProjectTasksGroupedBySections(projectId)
-        console.log("tasks🟢", tasks)
+//     try {
+//         const tasks = await Task.getProjectTasksGroupedBySections(projectId)
+//         console.log("tasks🟢", tasks)
 
-        return res.status(200).json(tasks)
-    } catch (error) {
-        console.error(" projectController  error at line 172 ::", error)
-        return res.status(500).json(error)
-    }
-}
+//         return res.status(200).json(tasks)
+//     } catch (error) {
+//         console.error(" projectController  error at line 172 ::", error)
+//         return res.status(500).json(error)
+//     }
+// }
 const getInboxTasks = async (req, res) => {
     console.log("169")
 
@@ -199,6 +199,31 @@ const getInboxTasks = async (req, res) => {
     }
 }
 
-module.exports = { getAllProjects, getProjectTasks, getInboxTasks,createProject }
+const getProjectTasks = async (req, res) => {
+    console.log("first..")
+    const { projectId } = req.params
 
+    console.log("projectId", projectId)
 
+    const project = await Project.findById(projectId).populate({
+        path: "sections",
+        populate: {
+            path: "tasks",
+            model: "Task",
+        },
+    })
+
+    console.log("project", project)
+    return res.status(200).json(project)
+
+    if (!project) {
+        return res.status(404).json({ message: "no project found" })
+    }
+}
+
+module.exports = {
+    getAllProjects,
+    getProjectTasks,
+    getInboxTasks,
+    createProject,
+}

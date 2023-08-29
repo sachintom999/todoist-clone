@@ -146,6 +146,10 @@ async function insertSampleData() {
             dueDate: new Date(),
             section: healthSection._id,
         })
+
+        healthSection.tasks.push(healthTask._id)
+        await healthSection.save()
+
         const financeTask = await Task.create({
             title: "finance tasks",
             desc: ".......",
@@ -156,6 +160,10 @@ async function insertSampleData() {
             section: financeSection._id,
         })
 
+
+        financeSection.tasks.push(financeTask._id)
+        await financeSection.save()
+
         const frontendSubtask = await Task.create({
             title: "Frontend",
             desc: "Develop frontend components",
@@ -165,6 +173,9 @@ async function insertSampleData() {
             user: user._id, // Assign the user
             parentTask: todoistCloneTask._id,
         })
+
+        codingSection.tasks.push(frontendSubtask._id)
+        await codingSection.save()
 
         const backendSubtask = await Task.create({
             title: "Backend",
@@ -177,6 +188,9 @@ async function insertSampleData() {
             completed: true,
             parentTask: todoistCloneTask._id,
         })
+
+        codingSection.tasks.push(backendSubtask._id)
+        await codingSection.save()
 
         const comment = await Comment.create({
             text: "This is amazing....",

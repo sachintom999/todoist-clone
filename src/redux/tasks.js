@@ -292,8 +292,9 @@ export const getProjectTasks = createAsyncThunk(
     "tasks/getProjectTasks",
     async id => {
         const response = await axios.get(
-            `http://localhost:3000/api/projects/${id}/tasks`
+            `http://localhost:3000/temp/${id}`
         )
+        console.log("297",response.data)
         return response.data
     }
 )
