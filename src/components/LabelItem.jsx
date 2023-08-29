@@ -1,22 +1,17 @@
 import { useDispatch } from "react-redux"
 import { updatecreateEditLabelModal } from "../redux/tasks"
 import getIcon from "../utils/getIcons"
+import { useNavigate } from "react-router-dom"
 
 const LabelItem = ({ label }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     return (
         <div
-            className="w-fill p-2"
+            className="w-fill p-2 cursor-pointer"
             onClick={() => {
-                dispatch(
-                    updatecreateEditLabelModal({
-                        show: true,
-                        data: {
-                            title: "Edit Label",
-                        },
-                    })
-                )
+                navigate(`/label/${label._id}`)
             }}
         >
             <div className="flex">

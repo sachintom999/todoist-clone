@@ -1,11 +1,13 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { fetchLabelTasks } from "../redux/tasks"
 import getIcon from "../utils/getIcons"
 import AddForm from "./AddForm"
 const LabelTasks = () => {
     const { labelId } = useParams()
+    const navigate = useNavigate()
+
     console.log("labelId", labelId)
     const { labelTasks } = useSelector(state => state.tasks)
     const dispatch = useDispatch()
@@ -17,7 +19,13 @@ const LabelTasks = () => {
     }, [labelId])
 
     return (
-        <div className="w-screen h-screen p-10">
+        <div className="w-screen h-screen px-10 py-6">
+            {getIcon("arrowLeft2", {
+                className: "cursor-pointer mb-6",
+                onClick: () => {
+                    navigate("/filters-labels")
+                },
+            })}
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold mb-4">{labelTasks.name}</h2>
 
@@ -31,7 +39,7 @@ const LabelTasks = () => {
             <hr />
 
             {labelTasks?.tasks?.map(task => {
-                return <LabelTask task={task} />
+                return <LabelTask key={task._id} task={task} />
             })}
 
             <AddForm />
@@ -55,7 +63,7 @@ function LabelTask({ task }) {
             <div className="flex items-center justify-between text-xs">
                 <div>
                     {task.labels?.map(tag => {
-                        return <span>{tag?.name}</span>
+                        return <span key={tag._id}>{tag?.name}</span>
                     })}
                 </div>
 

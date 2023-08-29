@@ -38,6 +38,10 @@ export const tasksSlice = createSlice({
             show: false,
             data: {},
         },
+        addProjectModal: {
+            show: false,
+            data: {},
+        },
         cornerModal: {
             show: false,
             data: {},
@@ -80,6 +84,9 @@ export const tasksSlice = createSlice({
         updatedeleteConfirmationModal: (state, action) => {
             console.log("49 ", action.payload)
             state.deleteConfirmationModal = action.payload
+        },
+        updateaddProjectModal: (state, action) => {
+            state.addProjectModal = action.payload
         },
 
         updateNewTaskForm: (state, action) => {
@@ -382,6 +389,21 @@ export const createComment = createAsyncThunk(
         return response.data
     }
 )
+export const createProject = createAsyncThunk(
+    "tasks/createProject",
+    async payload => {
+        console.log("payload", payload)
+
+        const response = await axios.post(
+            `http://localhost:3000/api/projects`,
+            payload
+        )
+
+        console.log("response.data", response.data)
+
+        return response.data
+    }
+)
 
 //  dispatch ( createComment( {taskId:"",text:"" }  ))
 
@@ -405,6 +427,7 @@ export const {
     updatecreateEditLabelModal,
     updateaddTaskModal,
     updateappState,
+    updateaddProjectModal
 } = tasksSlice.actions
 
 export default tasksSlice.reducer

@@ -13,6 +13,18 @@ const getAllProjects = async (req, res) => {
     return res.status(200).json(projects)
 }
 
+const createProject = async (req, res) => {
+    const projectDetails = req.body
+    const owner = await User.findOne({})
+    try {
+        const project = await Project.create({...projectDetails,owner})
+        return res.status(200).json(project)
+    } catch (error) {
+        console.error(" error ", error)
+        res.status(500).json({ error: error.message })
+    }
+}
+
 // const getProjectTasks = async (req, res) =>
 //  {
 //     console.log("15....")
@@ -156,13 +168,13 @@ const getAllProjects = async (req, res) => {
 // };
 
 const getProjectTasks = async (req, res) => {
-    console.log("/////",req.params)
+    console.log("/////", req.params)
     const { projectId } = req.params
-    console.log('projectId', projectId)
+    console.log("projectId", projectId)
 
     try {
         const tasks = await Task.getProjectTasksGroupedBySections(projectId)
-        console.log('tasks🟢', tasks)
+        console.log("tasks🟢", tasks)
 
         return res.status(200).json(tasks)
     } catch (error) {
@@ -171,14 +183,12 @@ const getProjectTasks = async (req, res) => {
     }
 }
 const getInboxTasks = async (req, res) => {
-    console.log('169')
-    
+    console.log("169")
 
     const currentUser = await User.findOne({})
     const project = await Project.getDefaultProject(currentUser._id)
 
-
-    console.log('project', project,project._id)
+    console.log("project", project, project._id)
 
     try {
         const tasks = await Task.getProjectTasksGroupedBySections(project._id)
@@ -189,4 +199,6 @@ const getInboxTasks = async (req, res) => {
     }
 }
 
-module.exports = { getAllProjects, getProjectTasks, getInboxTasks }
+module.exports = { getAllProjects, getProjectTasks, getInboxTasks,createProject }
+
+

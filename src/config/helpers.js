@@ -10,6 +10,12 @@ export const getPriorityColor = priority => {
 }
 
 
+export const colorOptions = [
+    { name: "Red", color: "red" },
+    { name: "Blue", color: "blue" },
+    { name: "Green", color: "green" },
+]
+
 
 
 export const  replaceKeys = (obj) => {

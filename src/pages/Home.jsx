@@ -6,6 +6,7 @@ import { Filters, Main,  } from "../components"
 import Inbox from "../components/Inbox1"
 import Upcoming2 from "../components/Upcoming3"
 import LabelTasks from "../components/LabelTasks"
+import AddProject from "../components/Modals/AddProject"
 
 const Home = () => {
     const { taskList } = useSelector(state => state.tasks)
@@ -17,6 +18,7 @@ const Home = () => {
             {/* <Router> */}
             <Routes>
                 <Route path="/" element={<Navigate to="/today" />} />
+                {/* <Route path="/" element={<AddProject  />} /> */}
                 <Route
                     path="/today"
                     element={<Main title="Today" taskList={taskList} />}

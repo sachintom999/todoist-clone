@@ -27,7 +27,7 @@ import {
     BsInbox,
     BsQuestionCircle,
 } from "react-icons/bs"
-import { FaStar } from "react-icons/fa"
+import { FaStar,FaArrowLeft } from "react-icons/fa"
 import { FiAlertCircle } from "react-icons/fi"
 import { GoSearch } from "react-icons/go"
 import { GrHomeRounded } from "react-icons/gr"
@@ -35,6 +35,7 @@ import { ImAttachment } from "react-icons/im"
 import { IoIosMore, IoMdSend } from "react-icons/io"
 import {
     MdKeyboardArrowRight,
+    MdKeyboardArrowLeft,
     MdOutlineAddReaction,
     MdOutlineMoreHoriz,
     MdToday,
@@ -81,6 +82,8 @@ const iconMappings = {
     flag: BsFlagFill,
     check: BsCheck,
     arrowRight: MdKeyboardArrowRight,
+    arrowLeft: MdKeyboardArrowLeft,
+    arrowLeft2: FaArrowLeft,
     info: BiInfoCircle,
     heartOff: LuHeartOff,
     // Add more mappings here

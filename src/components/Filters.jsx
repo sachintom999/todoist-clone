@@ -3,9 +3,13 @@ import { useDispatch } from "react-redux"
 import { getAllLabels } from "../redux/tasks"
 import { useSelector } from "react-redux"
 import LabelItem from "./LabelItem"
+import getIcon from "../utils/getIcons"
+import { useNavigate } from "react-router-dom"
+
 const Filters = () => {
     const dispatch = useDispatch()
     const { labels } = useSelector(state => state.tasks)
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getAllLabels())

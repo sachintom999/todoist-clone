@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux"
-import DeleteConfirmationModal from "./DeleteConfirmationModal"
-import CornerModal from "./CornerModal"
 import AddForm from "../AddForm"
+import AddProject from "./AddProject"
+import CornerModal from "./CornerModal"
 import CreateEditLabel from "./CreateEditLabel"
+import DeleteConfirmationModal from "./DeleteConfirmationModal"
 
 const AllModals = () => {
     const {
@@ -10,6 +11,7 @@ const AllModals = () => {
         cornerModal,
         addTaskModal,
         createEditLabelModal,
+        addProjectModal,
     } = useSelector(state => state.tasks)
     return (
         <div className="absolute m-auto">
@@ -17,6 +19,7 @@ const AllModals = () => {
             {cornerModal.show && <CornerModal />}
             {addTaskModal.show && <AddForm />}
             {createEditLabelModal.show && <CreateEditLabel />}
+            {addProjectModal.show && <AddProject />}
         </div>
     )
 }

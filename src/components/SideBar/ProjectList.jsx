@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchAllProjects } from "../../redux/tasks"
+import { fetchAllProjects, updateaddProjectModal } from "../../redux/tasks"
 import SidebarItem from "./SidebarItem"
 import getIcon from "../../utils/getIcons"
 const ProjectList = () => {
@@ -20,7 +20,7 @@ const ProjectList = () => {
                     fontSize: 16,
                     className: "ml-6 cursor-pointer hover:bg-slate-700",
                     onClick: () => {
-                        console.log("open new project Modal.. PENDING")
+                        dispatch(updateaddProjectModal({ show: true }))
                     },
                 })}
             </p>

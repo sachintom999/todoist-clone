@@ -24,7 +24,7 @@ const App = () => {
                 <Loading />
             ) : (
                 <div className="w-screen h-screen">
-                    {/* <AllModals /> */}
+                    <AllModals />
 
                     <div className="flex flex-col">
 
