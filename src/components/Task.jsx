@@ -25,6 +25,7 @@ const Task = ({
         priority,
         section,
         labels,
+        completed
     },
 }) => {
     const dispatch = useDispatch()
@@ -57,7 +58,7 @@ const Task = ({
 
     return (
         <div
-            className="bg-dark1 p-3 mt-4 mb-4 cursor-pointer rounded-md border-solid border-slate-700 shadow-gray-700 shadow-sm border"
+            className="bg-dark1 p-3 mt-4 mb-4 cursor-pointer rounded-md border-solid border-slate-700 shadow-gray-700 shadow-sm border text-slate-400 w-48"
             onClick={() => {
                 console.log("first")
                 dispatch(fetchTaskDetail(_id)).then(() => {
@@ -76,9 +77,13 @@ const Task = ({
                             e.stopPropagation()
                             markComplete()
                         }}
+
+                        checked={completed}
+
+
                     />
 
-                    <span className="ml-2 text-sm">{title}</span>
+                    <span className={`ml-2 text-xs ${completed ? " line-through": "" }`} >{title}</span>
                 </div>
                 <div
                     className="hover:bg-gray-400 px-1 cursor-pointer "
@@ -98,7 +103,7 @@ const Task = ({
                 </div>
             </div>
             <div className="my-2">
-                <ReactMarkdown className="text-xs">{desc}</ReactMarkdown>
+                {/* <ReactMarkdown className="text-xs">{desc}</ReactMarkdown> */}
             </div>
             <div className=" flex justify-between mt-2 text-xs items-center">
                 {subtasks?.length > 0 && (

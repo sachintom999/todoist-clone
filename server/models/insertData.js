@@ -111,6 +111,11 @@ async function insertSampleData() {
             user: user._id, // Assign the user
             dueDate: new Date(),
         })
+
+        codingSection.tasks.push(todoistCloneTask._id)
+        await codingSection.save()
+
+
         const webSiteTask = await Task.create({
             title: "Website",
             desc: "Create website",
@@ -120,6 +125,10 @@ async function insertSampleData() {
             user: user._id, // Assign the user
             dueDate: new Date(),
         })
+
+        marketingSection.tasks.push(webSiteTask._id)
+        await marketingSection.save()
+
         const noSectionTask = await Task.create({
             title: "No Section task",
             desc: "no section task",
@@ -160,7 +169,6 @@ async function insertSampleData() {
             section: financeSection._id,
         })
 
-
         financeSection.tasks.push(financeTask._id)
         await financeSection.save()
 
@@ -168,14 +176,12 @@ async function insertSampleData() {
             title: "Frontend",
             desc: "Develop frontend components",
             project: workProject._id,
-            section: codingSection._id,
             parent_task: todoistCloneTask._id, // Assign parent task
             user: user._id, // Assign the user
-            parentTask: todoistCloneTask._id,
+    
         })
 
-        codingSection.tasks.push(frontendSubtask._id)
-        await codingSection.save()
+        
 
         const backendSubtask = await Task.create({
             title: "Backend",

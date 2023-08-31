@@ -7,100 +7,34 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { getInboxTasks, getProjectTasks } from "../redux/tasks"
 import TaskDetail from "./TaskDetail"
-
-const grid = 8
-const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? "slategray" : "transparent",
-    padding: grid,
-    width: 300,
-})
-
-const priorityClass = {
-    1: "border-red-700",
-    2: "border-yellow-700",
-    3: "border-blue-600",
-    4: "border-white-400",
-}
-
-// const priorityClassName = priorityClass[priority] || "white"
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: "none",
-    // padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
-
-    // change background colour if dragging
-    background: isDragging ? "lightgray" : "transparent",
-
-    // styles we need to apply on draggables
-    ...draggableStyle,
-})
+import {
+    replaceKeys1,
+    grid,
+    getListStyle,
+    getItemStyle,
+} from "../config/helpers"
 
 const Main = ({ title, taskList }) => {
-    const sampleData = [
-        {
-            id: "list-1",
-            items: [
-                {
-                    id: "item-0",
-                    content: "item 0",
-                },
-
-                {
-                    id: "item-1",
-                    content: "item 1",
-                },
-                {
-                    id: "item-2",
-                    content: "item 2",
-                },
-            ],
-        },
-        {
-            id: "list-2",
-            items: [
-                {
-                    id: "item-10",
-                    content: "item 10",
-                },
-                {
-                    id: "item-11",
-                    content: "item 11",
-                },
-            ],
-        },
-    ]
     const { projectId } = useParams()
     const dispatch = useDispatch()
 
-    const { todaySections, taskDetailOpen, pageTasks } = useSelector(
-        state => state.tasks
-    )
+    const { taskDetailOpen, pageTasks } = useSelector(state => state.tasks)
 
-    const [lists, setLists] = useState(pageTasks)
+    const [lists, setLists] = useState([])
     const [showAddSectionForm, setShowAddSectionForm] = useState(null)
 
     useEffect(() => {
-        // dispatch(getTodayTasks(taskList))
-
-        console.log("🔴rendering...", pageTasks)
-
-
         if (projectId) {
             dispatch(getProjectTasks(projectId))
-
-            setLists(pageTasks?.sections)
+            console.log("51")
         } else {
+            console.log("53")
             dispatch(getInboxTasks())
         }
 
-        dispatch(getProjectTasks(projectId))
-        setLists(pageTasks?.sections)
-        console.log('lists', lists)
-
-
-
+        const sectionsData = pageTasks?.sections
+        setLists(replaceKeys1(sectionsData))
+        console.log("....", replaceKeys1(sectionsData))
     }, [projectId])
 
     const onDragEnd = result => {
@@ -111,9 +45,10 @@ const Main = ({ title, taskList }) => {
             return
         }
 
+        console.log("lists", lists)
         if (source.droppableId === destination.droppableId) {
             const listToUpdate = lists.find(
-                list => list.id.id === source.droppableId
+                list => list.id === source.droppableId
             )
 
             const updatedItems = Array.from(listToUpdate.tasks)
@@ -122,7 +57,7 @@ const Main = ({ title, taskList }) => {
 
             setLists(prevLists => {
                 return prevLists.map(list =>
-                    list.id.id === source.droppableId
+                    list.id === source.droppableId
                         ? { ...list, tasks: updatedItems }
                         : list
                 )
@@ -131,11 +66,11 @@ const Main = ({ title, taskList }) => {
             console.log("newList", lists)
         } else {
             const sourceListToUpdate = lists.find(list => {
-                console.log(list.id.id, source.droppableId)
-                return list.id.id === source.droppableId
+                console.log(list.id, source.droppableId)
+                return list.id === source.droppableId
             })
             const destinationListToUpdate = lists.find(
-                list => list.id.id === destination.droppableId
+                list => list.id === destination.droppableId
             )
 
             const updatedSourceItems = Array.from(sourceListToUpdate.tasks)
@@ -148,9 +83,9 @@ const Main = ({ title, taskList }) => {
 
             setLists(prevLists => {
                 return prevLists.map(list =>
-                    list.id.id === source.droppableId
+                    list.id === source.droppableId
                         ? { ...list, tasks: updatedSourceItems }
-                        : list.id.id === destination.droppableId
+                        : list.id === destination.droppableId
                         ? { ...list, tasks: updatedDestinationItems }
                         : list
                 )
@@ -175,8 +110,8 @@ const Main = ({ title, taskList }) => {
                     {lists?.map((section, sectionIndex) => (
                         <>
                             <Droppable
-                                key={section.id.id}
-                                droppableId={section.id.id}
+                                key={section.id}
+                                droppableId={section.id}
                             >
                                 {(provided, snapshot) => {
                                     // console.log("lists", lists)
@@ -188,7 +123,7 @@ const Main = ({ title, taskList }) => {
                                             )}
                                         >
                                             <p className="text-center text-sm font-bold">
-                                                {section.id.sectionName}
+                                                {section.name}
                                             </p>
                                             {section?.tasks?.map(
                                                 (task, index) => {
@@ -273,20 +208,18 @@ export default Main
 const VerticalBar = ({ setShowAddSectionForm, sectionIndex }) => {
     return (
         <div className="group">
-
-        <div
-            className=" bg-red-600  cursor-pointer  relative invisible group-hover:visible"
-            onClick={() => {
-                setShowAddSectionForm(sectionIndex)
-            }}
-            style={{ width: "5px" }}
-        >
-            <p className="absolute top-1/2 -left-9 py-2 rounded-md text-xs w-20 text-center bg-black text-red-600  ">
-                Add section
-            </p>
+            <div
+                className=" bg-red-600  cursor-pointer  relative invisible group-hover:visible"
+                onClick={() => {
+                    setShowAddSectionForm(sectionIndex)
+                }}
+                style={{ width: "5px" }}
+            >
+                <p className="absolute top-1/2 -left-9 py-2 rounded-md text-xs w-20 text-center bg-black text-red-600  ">
+                    Add section
+                </p>
+            </div>
         </div>
-        </div>
-
     )
 }
 

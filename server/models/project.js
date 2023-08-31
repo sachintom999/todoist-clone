@@ -20,6 +20,9 @@ const projectSchema = new Schema(
 projectSchema.statics.getDefaultProject = async function (ownerId) {
     return await this.findOne({ isInbox: true, owner: ownerId })
 }
+projectSchema.statics.getDefaultProjectTasks = async function (ownerId) {
+    return await this.findOne({ isInbox: true, owner: ownerId }).populate({ path: "sections", populate: { path: "tasks", model: "Task", }, })
+}
 
 const Project = mongoose.model("Project", projectSchema)
 

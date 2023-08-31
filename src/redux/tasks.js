@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import { replaceKeys } from "../config/helpers"
+import { replaceKeys, replaceKeys1 } from "../config/helpers"
 
 // export const updateTask = createAsyncThunk(
 //     "tasks/updateTask",
@@ -291,10 +291,13 @@ export const fetchAllTasks = createAsyncThunk(
 export const getProjectTasks = createAsyncThunk(
     "tasks/getProjectTasks",
     async id => {
-        const response = await axios.get(
-            `http://localhost:3000/temp/${id}`
-        )
-        console.log("297",response.data)
+        const response = await axios.get(`http://localhost:3000/temp/${id}`)
+        console.log("297", response.data)
+
+        const sectionTasks = response.data.sections
+        const updatedData = replaceKeys1(sectionTasks)
+        console.log("updatedData", updatedData)
+
         return response.data
     }
 )
@@ -304,6 +307,8 @@ export const getInboxTasks = createAsyncThunk(
         const response = await axios.get(
             `http://localhost:3000/api/projects/inbox-tasks`
         )
+
+        console.log('response.data', response.data)
         return response.data
     }
 )
@@ -428,7 +433,7 @@ export const {
     updatecreateEditLabelModal,
     updateaddTaskModal,
     updateappState,
-    updateaddProjectModal
+    updateaddProjectModal,
 } = tasksSlice.actions
 
 export default tasksSlice.reducer

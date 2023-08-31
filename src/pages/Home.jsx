@@ -17,7 +17,7 @@ const Home = () => {
         <div>
             {/* <Router> */}
             <Routes>
-                <Route path="/" element={<Navigate to="/today" />} />
+                {/* <Route path="/" element={<Navigate to="/today" />} /> */}
                 {/* <Route path="/" element={<AddProject  />} /> */}
                 <Route
                     path="/today"
