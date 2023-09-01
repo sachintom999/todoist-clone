@@ -9,6 +9,7 @@ const sectionSchema = new Schema(
             ref: "Project",
             required: true,
         },
+        order: { type: Number, required: false },
         tasks: [
             {
                 type: Schema.Types.ObjectId,

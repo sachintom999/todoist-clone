@@ -1,3 +1,4 @@
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { useEffect } from "react"
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import { AiOutlinePlus } from "react-icons/ai"
@@ -15,9 +16,9 @@ import {
 import PriorityModal from "./PriorityModal"
 import Subtask from "./Subtask"
 
-import getIcons from '../utils/getIcons'
+import getIcons from "../utils/getIcons"
 
-import { getPriorityColor } from "../config/helpers"
+import { getPriorityColor, replaceKeys1 } from "../config/helpers"
 import AddForm from "./AddForm"
 import CommentsContainer from "./CommentsContainer"
 import LabelContainer from "./LabelContainer"
@@ -34,7 +35,7 @@ const TaskDetail = () => {
         state => state.tasks
     )
 
-    console.log("taskDetailModalContents", taskDetailModalContents)
+    // console.log("taskDetailModalContents", taskDetailModalContents)
 
     // console.log("taskDetailModalContents", taskDetailModalContents)
 
@@ -55,6 +56,10 @@ const TaskDetail = () => {
         parentTask,
     } = taskDetailModalContents
 
+    console.log("nonCompletedSubtasks", nonCompletedSubtasks)
+
+    const nonCompletedSubtasks1 = replaceKeys1(nonCompletedSubtasks)
+
     const [isComplete, setIsComplete] = useState(completed)
 
     const priorityClass = {
@@ -69,6 +74,56 @@ const TaskDetail = () => {
     const [showForm, setShowForm] = useState(false)
     const [updatedTitle, setUpdatedTitle] = useState(title)
     const [updatedDesc, setUpdatedDesc] = useState(desc)
+    const [nonCompletedSubtasksState, setNonCompletedSubtasksState] = useState(
+        nonCompletedSubtasks1
+    )
+
+    const onDragEnd = result => {
+        // dropped outside the list
+        if (!result.destination) {
+            return
+        }
+
+        const items1 = reorder(
+            nonCompletedSubtasksState,
+            result.source.index,
+            result.destination.index
+        )
+
+        console.log("items1", items1)
+
+        setNonCompletedSubtasksState(items1)
+    }
+
+    // a little function to help us with reordering the result
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list)
+        const [removed] = result.splice(startIndex, 1)
+        result.splice(endIndex, 0, removed)
+
+        return result
+    }
+
+    const grid = 8
+
+    const getItemStyle = (isDragging, draggableStyle) => ({
+        // some basic styles to make the items look a bit nicer
+        userSelect: "none",
+        // padding: grid * 2,
+        // margin: `0 0 ${grid}px 0`,
+
+        // change background colour if dragging
+        // background: isDragging ? "lightgreen" : "grey",
+
+        // styles we need to apply on draggables
+        ...draggableStyle,
+    })
+
+    const getListStyle = isDraggingOver => ({
+        // background: isDraggingOver ? "lightblue" : "lightgrey",
+        // padding: grid,
+        // width: 250,
+    })
 
     useEffect(() => {
         // dispatch(updatetaskDetailModalState({ labels }))
@@ -130,7 +185,7 @@ const TaskDetail = () => {
                         dispatch(closeTaskDetailForm())
                     }}
                 >
-                    {getIcons('close', {className:"cursor-pointer"})}
+                    {getIcons("close", { className: "cursor-pointer" })}
                 </span>
             </div>
             <div className="w-full flex h-full ">
@@ -267,14 +322,73 @@ const TaskDetail = () => {
                                     </button>
                                 )}
                             </p>
-                            {nonCompletedSubtasks?.map(subtask => {
+                            <div className="w-full">
+                                <DragDropContext onDragEnd={onDragEnd}>
+                                    <Droppable droppableId="droppable">
+                                        {(provided, snapshot) => (
+                                            <>
+                                                <div
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}
+                                                    style={getListStyle(
+                                                        snapshot.isDraggingOver
+                                                    )}
+                                                >
+                                                    {nonCompletedSubtasksState?.map(
+                                                        (item, index) => (
+                                                            <Draggable
+                                                                key={item.id}
+                                                                draggableId={
+                                                                    item.id
+                                                                }
+                                                                index={index}
+                                                            >
+                                                                {(
+                                                                    provided,
+                                                                    snapshot
+                                                                ) => (
+                                                                    <div
+                                                                        ref={
+                                                                            provided.innerRef
+                                                                        }
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                        style={getItemStyle(
+                                                                            snapshot.isDragging,
+                                                                            provided
+                                                                                .draggableProps
+                                                                                .style
+                                                                        )}
+                                                                    >
+                                                                        <Subtask
+                                                                            key={
+                                                                                item.id
+                                                                            }
+                                                                            subtask={
+                                                                                item
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                            </Draggable>
+                                                        )
+                                                    )}
+                                                    {provided.placeholder}
+                                                </div>
+                                            </>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
+                            </div>
+
+                            {/* {nonCompletedSubtasks?.map(subtask => {
                                 return (
                                     <Subtask
                                         key={subtask._id}
                                         subtask={subtask}
                                     />
                                 )
-                            })}
+                            })} */}
                             <div className="text-xs flex items-center mt-4 justify-between">
                                 <span>
                                     <AiOutlinePlus className="inline mr-2" />
@@ -286,6 +400,7 @@ const TaskDetail = () => {
                             <AddForm />
                         </div>
                     )}
+
                     {showCompleted && completedSubtasks?.length > 0 && (
                         <div className="text-sm mt-3">
                             {completedSubtasks?.map(subtask => {

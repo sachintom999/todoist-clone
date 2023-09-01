@@ -25,6 +25,16 @@ const Subtask = ({ subtask: { title, desc, _id }, completed }) => {
         >
             {!showForm && (
                 <>
+                    {
+                        <span
+                            className="relative text-gray-500 left-0 top-0 cursor-pointer text-xs mr-2"
+                            onClick={() => {
+                                setShowForm(true)
+                            }}
+                        >
+                            ::
+                        </span>
+                    }
                     <input
                         type="checkbox"
                         name="asdsa"
@@ -44,7 +54,7 @@ const Subtask = ({ subtask: { title, desc, _id }, completed }) => {
 
                     {showOptions && (
                         <span
-                            className="relative text-gray-500 left-56 top-2 cursor-pointer"
+                            className="relative text-gray-500 left-56 top-2 cursor-pointer text-xs"
                             onClick={() => {
                                 setShowForm(true)
                             }}

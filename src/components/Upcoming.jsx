@@ -79,7 +79,7 @@ const Upcoming = () => {
     
 
     return (
-        <div className="h-screen w-screen">
+        <div className="w-full">
 
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
