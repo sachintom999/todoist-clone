@@ -231,6 +231,9 @@ export const tasksSlice = createSlice({
             state.taskList = action.payload
             state.appState.loading = false
         })
+        builder.addCase(reorderSubtasks.fulfilled, (state, action) => {
+            // state.taskDetailModalContents
+        })
         builder.addCase(fetchLabelTasks.fulfilled, (state, action) => {
             state.labelTasks = action.payload
         })
@@ -308,7 +311,7 @@ export const getInboxTasks = createAsyncThunk(
             `http://localhost:3000/api/projects/inbox-tasks`
         )
 
-        console.log('response.data', response.data)
+        console.log("response.data", response.data)
         return response.data
     }
 )
@@ -331,6 +334,22 @@ export const getAllLabels = createAsyncThunk("tasks/getAllLabels", async () => {
     const response = await axios.get("http://localhost:3000/api/labels")
     return response.data
 })
+export const reorderSubtasks = createAsyncThunk(
+    "tasks/reorderSubtasks",
+    async payload => {
+
+        console.log('341...payload', payload)
+        const { taskId, ...reqBody } = payload
+
+        const response = await axios.post(
+            `http://localhost:3000/api/tasks/${taskId}/reorder-subtasks`,
+            reqBody
+        )
+
+        console.log('response.data 🟠', response.data)
+        return response.data
+    }
+)
 
 export const fetchLabelTasks = createAsyncThunk(
     "tasks/fetchLabelTasks",

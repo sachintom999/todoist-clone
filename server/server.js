@@ -10,7 +10,7 @@ const projectRoutes = require("./routes/projectRoutes")
 const favouriteRoutes = require("./routes/favouriteRoutes")
 const sectionRoutes = require("./routes/sectionRoutes")
 const labelRoutes = require("./routes/labelRoutes")
-const { getTodayTasks } = require("./controllers/taskController")
+const { getTodayTasks, reorderSubTasks } = require("./controllers/taskController")
 const { getTasksUnderLabel } = require("./controllers/labelController")
 const {
     getProjectTasks,
@@ -64,12 +64,14 @@ app.get("/temp/:projectId", async (req, res) => {
         return res.status(404).json({ message: "no project found" })
     }
 })
+app.post("/temp", reorderSubTasks)
 
 // app.post("/", (req, res) => {
 //     return res.json({ msg: 123 })
 // })
 
 // DB
+
 
 mongoose
     .connect(process.env.MONGO_URI)

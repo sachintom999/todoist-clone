@@ -111,6 +111,57 @@ const deleteTask = async (req, res) => {
     }
 }
 
+
+
+
+const reorderSubTasks = async(req,res) => {  
+
+    console.log("....")
+
+    const { taskId } = req.params;
+    const { originalIndex, newIndex } = req.body;
+
+
+    try {
+        // Find the parent task by taskId
+        const parentTask = await Task.findById(taskId);
+
+        if (!parentTask) {
+            return res.status(404).json({ message: 'Parent task not found' });
+        }
+
+        // Retrieve the subtask being reordered
+        const subtaskToReorder = parentTask.subtasks[originalIndex];
+
+        // Remove the subtask from its original position
+        parentTask.subtasks.splice(originalIndex, 1);
+
+        // Insert the subtask at the new position
+        parentTask.subtasks.splice(newIndex, 0, subtaskToReorder);
+
+        // Update the order field of all affected subtasks
+        for (let i = 0; i < parentTask.subtasks.length; i++) {
+            const subtaskId = parentTask.subtasks[i];
+            const subtask = await Task.findById(subtaskId);
+            if (subtask) {
+                subtask.order = i;
+                await subtask.save();
+            }
+        }
+
+        await parentTask.save();
+
+        return res.status(200).json({ message: 'Subtask order updated successfully'  });
+    } catch (error) {
+        console.error('Error updating subtask order:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+
+
+
+
+}
+
 const updateTask = async (req, res) => {
     const { id } = req.params
     console.log("🔴 in updateTask req.body", req.body)
@@ -250,5 +301,6 @@ module.exports = {
     deleteTask,
     updateTask,
     getTodayTasks,
+    reorderSubTasks
     // getInboxTasks,
 }

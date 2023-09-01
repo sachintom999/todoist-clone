@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux"
 import {
     closeTaskDetailForm,
     fetchTaskDetail,
+    reorderSubtasks,
     updateTask,
     updatetaskDetailModalState,
 } from "../redux/tasks"
@@ -35,7 +36,7 @@ const TaskDetail = () => {
         state => state.tasks
     )
 
-    // console.log("taskDetailModalContents", taskDetailModalContents)
+    console.log("taskDetailModalContents", taskDetailModalContents)
 
     // console.log("taskDetailModalContents", taskDetailModalContents)
 
@@ -80,6 +81,10 @@ const TaskDetail = () => {
 
     const onDragEnd = result => {
         // dropped outside the list
+        console.log("result", result)
+        const { source, destination } = result
+        console.log({ source, destination })
+
         if (!result.destination) {
             return
         }
@@ -92,7 +97,14 @@ const TaskDetail = () => {
 
         console.log("items1", items1)
 
+         console.log('_id', _id)   
+        const payload = {
+            taskId: _id,
+            originalIndex: result.source.index,
+            newIndex: result.destination.index,
+        }
         setNonCompletedSubtasksState(items1)
+        dispatch(reorderSubtasks(payload))
     }
 
     // a little function to help us with reordering the result
@@ -337,10 +349,8 @@ const TaskDetail = () => {
                                                     {nonCompletedSubtasksState?.map(
                                                         (item, index) => (
                                                             <Draggable
-                                                                key={item.id}
-                                                                draggableId={
-                                                                    item.id
-                                                                }
+                                                                key={item.order.toString()}
+                                                                draggableId={item.order.toString()}
                                                                 index={index}
                                                             >
                                                                 {(

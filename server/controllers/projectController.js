@@ -47,9 +47,10 @@ const getProjectTasks = async (req, res) => {
 
     const project = await Project.findById(projectId).populate({
         path: "sections",
+        options: { sort: { order: 1 } },
         populate: {
             path: "tasks",
-            /*match: { parentTask: null },*/ model: "Task",
+            model: "Task",
         },
     })
 

@@ -152,10 +152,24 @@ async function insertSampleData() {
             parentTask: reviewPRTask._id,
             order: 2,
         })
+        const reviewPRTask_subtask3 = await Task.create({
+            title: "PR 3",
+            desc: "....",
+            completed: false,
+            dueDate: new Date("2023-09-19"),
+            subtasks: [],
+            comments: [],
+            priority: 3,
+
+            user: user._id,
+            parentTask: reviewPRTask._id,
+            order: 3,
+        })
 
         reviewPRTask.subtasks.push(
             reviewPRTask_subtask1._id,
-            reviewPRTask_subtask2._id
+            reviewPRTask_subtask2._id,
+            reviewPRTask_subtask3._id
         )
         await reviewPRTask.save()
 
@@ -176,7 +190,7 @@ async function insertSampleData() {
         })
 
         // Update Section and Label tasks arrays
-        codingSection.tasks.push(codingTask._id, )
+        codingSection.tasks.push(codingTask._id)
         reviewSection.tasks.push(reviewPRTask._id)
         await reviewSection.save()
         await codingSection.save()
