@@ -3,7 +3,7 @@ import AddForm from "./AddForm"
 import AddTaskForm from "./AddTaskForm"
 import { fetchTaskDetail } from "../redux/tasks"
 import { useDispatch } from "react-redux"
-const Subtask = ({ subtask: { title, desc, _id }, completed }) => {
+const Subtask = ({ subtask: { title, desc, id }, completed }) => {
     const [showOptions, setShowOptions] = useState(false)
     const [showForm, setShowForm] = useState(false)
     const dispatch = useDispatch()
@@ -20,20 +20,21 @@ const Subtask = ({ subtask: { title, desc, _id }, completed }) => {
                 setShowOptions(false)
             }}
             onClick={() => {
-                dispatch(fetchTaskDetail(_id))
+                dispatch(fetchTaskDetail(id))
             }}
         >
             {!showForm && (
                 <>
                     {
-                        <span
-                            className="relative text-gray-500 left-0 top-0 cursor-pointer text-xs mr-2"
-                            onClick={() => {
-                                setShowForm(true)
-                            }}
-                        >
-                            ::
-                        </span>
+                        <>
+                            <span
+                                className="relative text-gray-500 left-0 top-0 cursor-pointer text-xs mr-2"
+                                onClick={() => {
+                                    setShowForm(true)
+                                }}
+                            ></span>
+                            {showOptions && <span>::</span>}
+                        </>
                     }
                     <input
                         type="checkbox"

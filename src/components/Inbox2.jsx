@@ -150,7 +150,7 @@ function App() {
     // )
 
     return (
-        <div className="relative">
+        <div className="relative w-screen h-screen">
             <form
                 className="flex flex-col bg-dark1  border rounded-md border-gray-600 mt-4 w-96 ml-10"
                 // onSubmit={handleSubmit}
