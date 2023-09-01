@@ -72,13 +72,13 @@ async function insertSampleData() {
         const codingSection = await Section.create({
             name: "Coding",
             project: workProject._id,
-            order: 1,
+            order: 2,
             tasks: [], // Initialize tasks array
         })
         const reviewSection = await Section.create({
             name: "Review",
             project: workProject._id,
-            order: 2,
+            order: 1,
             tasks: [], // Initialize tasks array
         })
 
@@ -111,6 +111,21 @@ async function insertSampleData() {
             user: user._id,
             parentTask: null,
             order: 1,
+        })
+        const NewTask = await Task.create({
+            title: "New feature",
+            desc: "start a new feature",
+            completed: false,
+            dueDate: new Date("2023-09-10"),
+            subtasks: [],
+            comments: [],
+            priority: 3,
+            labels: [wipLabel._id],
+            project: workProject._id,
+            section: codingSection._id,
+            user: user._id,
+            parentTask: null,
+            order: 2,
         })
         const reviewPRTask = await Task.create({
             title: "Review PR",
@@ -190,7 +205,7 @@ async function insertSampleData() {
         })
 
         // Update Section and Label tasks arrays
-        codingSection.tasks.push(codingTask._id)
+        codingSection.tasks.push(codingTask._id,NewTask._id)
         reviewSection.tasks.push(reviewPRTask._id)
         await reviewSection.save()
         await codingSection.save()
