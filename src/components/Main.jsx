@@ -5,7 +5,12 @@ import { useEffect, useState } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { getInboxTasks, getProjectTasks } from "../redux/tasks"
+import {
+    getInboxTasks,
+    getProjectTasks,
+    moveTask,
+    reorderSectionTasks,
+} from "../redux/tasks"
 import TaskDetail from "./TaskDetail"
 import {
     replaceKeys1,
@@ -63,10 +68,17 @@ const Main = ({ title, taskList }) => {
                 )
             })
 
+            dispatch(
+                reorderSectionTasks({
+                    sectionId: source.droppableId,
+                    originalIndex: result.source.index,
+                    newIndex: result.destination.index,
+                })
+            )
+
             console.log("newList", lists)
         } else {
             const sourceListToUpdate = lists.find(list => {
-                console.log(list.id, source.droppableId)
                 return list.id === source.droppableId
             })
             const destinationListToUpdate = lists.find(
@@ -90,6 +102,15 @@ const Main = ({ title, taskList }) => {
                         : list
                 )
             })
+
+            const payload = {
+                origSectionId: source.droppableId,
+                newSectionId: destination.droppableId,
+                origIndex: source.index,
+                newIndex : destination.index,
+            }
+
+            dispatch(moveTask(payload))
 
             console.log("newList", lists)
         }

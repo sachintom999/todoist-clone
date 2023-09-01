@@ -111,55 +111,149 @@ const deleteTask = async (req, res) => {
     }
 }
 
-
-
-
-const reorderSubTasks = async(req,res) => {  
-
-    console.log("....")
-
-    const { taskId } = req.params;
-    const { originalIndex, newIndex } = req.body;
-
+const reorderSubTasks = async (req, res) => {
+    const { taskId } = req.params
+    const { originalIndex, newIndex } = req.body
 
     try {
         // Find the parent task by taskId
-        const parentTask = await Task.findById(taskId);
+        const parentTask = await Task.findById(taskId)
 
         if (!parentTask) {
-            return res.status(404).json({ message: 'Parent task not found' });
+            return res.status(404).json({ message: "Parent task not found" })
         }
 
         // Retrieve the subtask being reordered
-        const subtaskToReorder = parentTask.subtasks[originalIndex];
+        const subtaskToReorder = parentTask.subtasks[originalIndex]
 
         // Remove the subtask from its original position
-        parentTask.subtasks.splice(originalIndex, 1);
+        parentTask.subtasks.splice(originalIndex, 1)
 
         // Insert the subtask at the new position
-        parentTask.subtasks.splice(newIndex, 0, subtaskToReorder);
+        parentTask.subtasks.splice(newIndex, 0, subtaskToReorder)
 
         // Update the order field of all affected subtasks
         for (let i = 0; i < parentTask.subtasks.length; i++) {
-            const subtaskId = parentTask.subtasks[i];
-            const subtask = await Task.findById(subtaskId);
+            const subtaskId = parentTask.subtasks[i]
+            const subtask = await Task.findById(subtaskId)
             if (subtask) {
-                subtask.order = i;
-                await subtask.save();
+                subtask.order = i
+                await subtask.save()
             }
         }
 
-        await parentTask.save();
+        await parentTask.save()
 
-        return res.status(200).json({ message: 'Subtask order updated successfully'  });
+        return res
+            .status(200)
+            .json({ message: "Subtask order updated successfully" })
     } catch (error) {
-        console.error('Error updating subtask order:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error("Error updating subtask order:", error)
+        return res.status(500).json({ message: "Internal server error" })
+    }
+}
+const reorderSectionTasks = async (req, res) => {
+    const { sectionId } = req.params
+    const { originalIndex, newIndex } = req.body
+
+    try {
+        // Find the parent task by taskId
+        const section = await Section.findById(sectionId)
+
+        if (!section) {
+            return res.status(404).json({ message: "Parent task not found" })
+        }
+
+        // Retrieve the subtask being reordered
+        const subtaskToReorder = section.tasks[originalIndex]
+
+        // Remove the subtask from its original position
+        section.tasks.splice(originalIndex, 1)
+
+        // Insert the subtask at the new position
+        section.tasks.splice(newIndex, 0, subtaskToReorder)
+
+        // Update the order field of all affected tasks
+        for (let i = 0; i < section.tasks.length; i++) {
+            const taskId = section.tasks[i]
+            const task = await Task.findById(taskId)
+            if (task) {
+                task.order = i
+                await task.save()
+            }
+        }
+
+        await section.save()
+
+        return res
+            .status(200)
+            .json({ message: "Subtask order updated successfully" })
+    } catch (error) {
+        console.error("Error updating subtask order:", error)
+        return res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+const moveTask = async (req, res) => {
+    console.log(".......;.;.;.")
+    // const { origSection, newSection, origIndex, newIndex } = req.body
+
+    const { origSectionId, newSectionId, origIndex, newIndex } = req.body
+    // const origSectionId = "64f19b4bccd3e6532e6db9ac"
+    // const newSectionId = "64f19b4bccd3e6532e6db9ae"
+    // const origIndex = 0
+    // const newIndex = 0
+
+    const task = await Task.findOne({
+        section: origSectionId,
+        order: origIndex,
+    })
+    const taskId = task._id
+
+    const origSection = await Section.findById(origSectionId)
+    const newSection = await Section.findById(newSectionId)
+
+    console.log("task", task._id)
+    console.log("origSection", origSection._id)
+    console.log("newSection", newSection._id)
+
+    // Remove the task from the old section and old index
+    origSection.tasks.splice(origIndex, 1)
+
+    // Insert the task into the new section and new index
+    newSection.tasks.splice(newIndex, 0, taskId)
+
+    // Update the task's section reference
+    task.section = newSectionId
+
+    // Update the order of tasks in the old section
+    for (let i = 0; i < origSection.tasks.length; i++) {
+        const taskId = origSection.tasks[i]
+        const taskToUpdate = await Task.findById(taskId)
+        if (taskToUpdate) {
+            taskToUpdate.order = i
+            await taskToUpdate.save()
+        }
     }
 
+    // Update the order of tasks in the new section
+    for (let i = 0; i < newSection.tasks.length; i++) {
+        const taskId = newSection.tasks[i]
+        const taskToUpdate = await Task.findById(taskId)
+        if (taskToUpdate) {
+            taskToUpdate.order = i
+            await taskToUpdate.save()
+        }
+    }
 
+    // Save the changes for both sections
+    await origSection.save()
+    await newSection.save()
+    await task.save()
 
-
+    return res
+        .status(200)
+        .json({ message: "Task moved and reordered successfully" })
 }
 
 const updateTask = async (req, res) => {
@@ -301,6 +395,8 @@ module.exports = {
     deleteTask,
     updateTask,
     getTodayTasks,
-    reorderSubTasks
+    reorderSubTasks,
+    reorderSectionTasks,
+    moveTask,
     // getInboxTasks,
 }

@@ -334,11 +334,10 @@ export const getAllLabels = createAsyncThunk("tasks/getAllLabels", async () => {
     const response = await axios.get("http://localhost:3000/api/labels")
     return response.data
 })
+
 export const reorderSubtasks = createAsyncThunk(
     "tasks/reorderSubtasks",
     async payload => {
-
-        console.log('341...payload', payload)
         const { taskId, ...reqBody } = payload
 
         const response = await axios.post(
@@ -346,10 +345,35 @@ export const reorderSubtasks = createAsyncThunk(
             reqBody
         )
 
-        console.log('response.data 🟠', response.data)
+        console.log("response.data 🟠", response.data)
         return response.data
     }
 )
+
+export const reorderSectionTasks = createAsyncThunk(
+    "tasks/reorderSectionTasks",
+    async payload => {
+        console.log("341...payload", payload)
+        const { sectionId, ...reqBody } = payload
+
+        const response = await axios.post(
+            `http://localhost:3000/api/tasks/${sectionId}/reorder-section-tasks`,
+            reqBody
+        )
+
+        return response.data
+    }
+)
+
+export const moveTask = createAsyncThunk("tasks/moveTask", async payload => {
+    const response = await axios.post(
+        `http://localhost:3000/api/tasks/moveTask`,
+        payload
+    )
+    console.log('reponse.data', reponse.data)
+
+    return response.data
+})
 
 export const fetchLabelTasks = createAsyncThunk(
     "tasks/fetchLabelTasks",
