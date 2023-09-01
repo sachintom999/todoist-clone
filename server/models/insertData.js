@@ -1,15 +1,15 @@
-const mongoose = require("mongoose");
-const User = require("./user");
-const Label = require("./label");
-const Section = require("./section");
-const Task = require("./task");
-const Project = require("./project");
-const Comment = require("./comment");
+const mongoose = require("mongoose")
+const User = require("./user")
+const Label = require("./label")
+const Section = require("./section")
+const Task = require("./task")
+const Project = require("./project")
+const Comment = require("./comment")
 
-const path = require("path");require("dotenv").config({ path: path.resolve(__dirname, "../.env") })
+const path = require("path")
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") })
 
-mongoose.connect(process.env.MONGO_URI);
-
+mongoose.connect(process.env.MONGO_URI)
 
 async function deleteData() {
     try {
@@ -25,7 +25,6 @@ async function deleteData() {
     }
 }
 
-
 async function insertSampleData() {
     try {
         // Insert Users
@@ -34,7 +33,7 @@ async function insertSampleData() {
             firstName: "John",
             lastName: "Doe",
             image: "https://example.com/john.jpg",
-        });
+        })
 
         // Insert Labels
         const wipLabel = await Label.create({
@@ -42,13 +41,13 @@ async function insertSampleData() {
             user: user._id,
             color: "#ff9900",
             favourite: true,
-        });
+        })
 
         const homeLabel = await Label.create({
             name: "Home",
             user: user._id,
             color: "#3366cc",
-        });
+        })
 
         // Insert Projects
         const workProject = await Project.create({
@@ -58,7 +57,7 @@ async function insertSampleData() {
             sections: [],
             favourite: true,
             isInbox: false,
-        });
+        })
 
         const homeProject = await Project.create({
             name: "Home Project",
@@ -67,7 +66,7 @@ async function insertSampleData() {
             sections: [],
             favourite: true,
             isInbox: false,
-        });
+        })
 
         // Insert Sections
         const codingSection = await Section.create({
@@ -75,27 +74,28 @@ async function insertSampleData() {
             project: workProject._id,
             order: 1,
             tasks: [], // Initialize tasks array
-        });
-        
+        })
+        const reviewSection = await Section.create({
+            name: "Review",
+            project: workProject._id,
+            order: 2,
+            tasks: [], // Initialize tasks array
+        })
 
         const shoppingSection = await Section.create({
             name: "Shopping",
             project: homeProject._id,
             order: 1,
             tasks: [], // Initialize tasks array
-        });
+        })
 
         workProject.sections.push(codingSection._id)
+        workProject.sections.push(reviewSection._id)
         homeProject.sections.push(shoppingSection._id)
 
         await workProject.save()
         await homeProject.save()
 
-        
-        
-        
-        
-        
         // Insert Tasks
         const codingTask = await Task.create({
             title: "Complete Feature",
@@ -111,7 +111,53 @@ async function insertSampleData() {
             user: user._id,
             parentTask: null,
             order: 1,
-        });
+        })
+        const reviewPRTask = await Task.create({
+            title: "Review PR",
+            desc: "review all the PR in the github",
+            completed: false,
+            dueDate: new Date("2023-09-19"),
+            subtasks: [],
+            comments: [],
+            priority: 3,
+            labels: [wipLabel._id],
+            project: workProject._id,
+            section: reviewSection._id,
+            user: user._id,
+            parentTask: null,
+            order: 2,
+        })
+        const reviewPRTask_subtask1 = await Task.create({
+            title: "PR 1",
+            desc: "....",
+            completed: false,
+            dueDate: new Date("2023-09-19"),
+            subtasks: [],
+            comments: [],
+            priority: 3,
+            user: user._id,
+            parentTask: reviewPRTask._id,
+            order: 1,
+        })
+        const reviewPRTask_subtask2 = await Task.create({
+            title: "PR 2",
+            desc: "....",
+            completed: false,
+            dueDate: new Date("2023-09-19"),
+            subtasks: [],
+            comments: [],
+            priority: 3,
+
+            user: user._id,
+            parentTask: reviewPRTask._id,
+            order: 2,
+        })
+
+        reviewPRTask.subtasks.push(
+            reviewPRTask_subtask1._id,
+            reviewPRTask_subtask2._id
+        )
+        await reviewPRTask.save()
 
         const shoppingTask = await Task.create({
             title: "Grocery Shopping",
@@ -127,21 +173,23 @@ async function insertSampleData() {
             user: user._id,
             parentTask: null,
             order: 1,
-        });
+        })
 
         // Update Section and Label tasks arrays
-        codingSection.tasks.push(codingTask._id);
-        await codingSection.save();
+        codingSection.tasks.push(codingTask._id, )
+        reviewSection.tasks.push(reviewPRTask._id)
+        await reviewSection.save()
+        await codingSection.save()
 
-        shoppingSection.tasks.push(shoppingTask._id);
-        await shoppingSection.save();
+        shoppingSection.tasks.push(shoppingTask._id)
+        await shoppingSection.save()
 
         // Update Label tasks array
-        wipLabel.tasks.push(codingTask._id);
-        await wipLabel.save();
+        wipLabel.tasks.push(codingTask._id)
+        await wipLabel.save()
 
-        homeLabel.tasks.push(shoppingTask._id);
-        await homeLabel.save();
+        homeLabel.tasks.push(shoppingTask._id)
+        await homeLabel.save()
 
         const comment = await Comment.create({
             text: "This is amazing....",
@@ -177,14 +225,11 @@ async function insertSampleData() {
         codingTask.comments.push(comment._id, comment1._id)
         await codingTask.save()
 
-
-
-
-        console.log("Sample data inserted successfully.");
+        console.log("Sample data inserted successfully.")
     } catch (error) {
-        console.error("Error inserting sample data:", error);
+        console.error("Error inserting sample data:", error)
     } finally {
-        mongoose.disconnect();
+        mongoose.disconnect()
     }
 }
 
@@ -193,4 +238,3 @@ deleteData().then(() => {
     // After deleting data, insert sample data
     insertSampleData()
 })
-
