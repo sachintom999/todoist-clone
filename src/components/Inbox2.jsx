@@ -4,11 +4,21 @@ import { BsCalendar3, BsFlag } from "react-icons/bs"
 import { AiOutlineTag, AiFillTag, AiOutlineClose } from "react-icons/ai"
 import { MdOutlineMoreHoriz } from "react-icons/md"
 import { IoMdSend } from "react-icons/io"
+import { formattedDate } from "../config/helpers"
 
 let tagsProp = []
 let priority = null
 
 function App() {
+
+
+
+    const xx = formattedDate()
+    console.log('xx=======', xx)
+
+
+
+
     const origLabelOptions = ["wip", "sip", "buy"]
     const priorityOptions = ["p1", "p2", "p3", "p4"];
     const [content, setContent] = useState("")

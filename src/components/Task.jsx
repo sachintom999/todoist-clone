@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux"
-import ReactMarkdown from "react-markdown"
+import { useDispatch, useSelector } from "react-redux"
+
 
 import { AiOutlineBranches } from "react-icons/ai"
 import { BiComment } from "react-icons/bi"
@@ -11,12 +11,13 @@ import {
     updatedeleteConfirmationModal,
 } from "../redux/tasks"
 import LabelList from "./LabelList"
+import { formattedDate } from "../config/helpers"
 
 const Task = ({
     task: {
         title,
         desc,
-        id:_id,
+        id: _id,
         dueDate,
         project,
         completedSubtasksCount,
@@ -25,10 +26,17 @@ const Task = ({
         priority,
         section,
         labels,
-        completed
+        completed,
     },
 }) => {
     const dispatch = useDispatch()
+
+    const { userSettings:{timeZone} } = useSelector(state => state.user)
+    
+
+    
+
+    
 
     const priorityClass = {
         1: "border-red-700",
@@ -77,13 +85,16 @@ const Task = ({
                             e.stopPropagation()
                             markComplete()
                         }}
-
                         checked={completed}
-
-
                     />
 
-                    <span className={`ml-2 text-xs ${completed ? " line-through": "" }`} >{title}</span>
+                    <span
+                        className={`ml-2 text-xs ${
+                            completed ? " line-through" : ""
+                        }`}
+                    >
+                        {title}
+                    </span>
                 </div>
                 <div
                     className="hover:bg-gray-400 px-1 cursor-pointer "
@@ -124,7 +135,8 @@ const Task = ({
                 </span>
                 <span className={timeClassName}>
                     <BsCalendar3 fontSize={10} className="inline" />{" "}
-                    {new Date(dueDate).toLocaleString("en-US", options)}
+                    {formattedDate(dueDate,timeZone)}
+                    
                 </span>
                 <span>{project?.name}</span>
                 {section?.name && <span>/{section?.name}</span>}

@@ -1,3 +1,48 @@
+import { getDay, isToday, isTomorrow } from "date-fns"
+import { format } from "date-fns-tz"
+import { enUS } from "date-fns/locale" // Replace 'enUS' with the desired locale for your app
+
+export function formattedDate(
+    date = "2023-09-12T17:00:00.000Z",
+    userTimeZone = "Asia/Kolkata"
+) {
+    const currentDate = new Date()
+    const dueDate = new Date(date)
+    const dueDay = getDay(dueDate)
+
+    if (isToday(dueDate)) {
+        // return "Today"
+        return format(dueDate, "'Today' h:mm a", {
+            locale: enUS, // Replace with the desired locale
+            timeZone: userTimeZone,
+        })
+    } else if (isTomorrow(dueDate)) {
+        // return "Tomorrow"
+        return format(dueDate, "'Tomorrow' h:mm a", {
+            locale: enUS, // Replace with the desired locale
+            timeZone: userTimeZone,
+        })
+    } else if (dueDay >= 1 && dueDay < 6) {
+        // Monday (1) to Saturday (6)
+        return format(dueDate, "EEEE h:mm a", {
+            locale: enUS, // Replace with the desired locale
+            timeZone: userTimeZone,
+        })
+    } else {
+        // Handle dates outside the specified range
+        return format(dueDate, "dd MMM h:mm a", {
+            timeZone: userTimeZone,
+        })
+    }
+}
+
+// Example usage:
+// const dueDate = "2023-09-12T00:00:00.000Z"; // Replace with your actual due date
+// const userTimeZone = 'Asia/Kolkata'; // Replace with the user's actual timezone
+
+// const humanReadableDueDate = getHumanReadableDate(dueDate, userTimeZone);
+// console.log(humanReadableDueDate);
+
 export const getPriorityColor = priority => {
     const priorityClass = {
         1: "red-700",
@@ -47,8 +92,6 @@ export const replaceKeys1 = data => {
         return data
     }
 }
-
-
 
 export const grid = 8
 export const getListStyle = isDraggingOver => ({

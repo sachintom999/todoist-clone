@@ -19,7 +19,7 @@ import Subtask from "./Subtask"
 
 import getIcons from "../utils/getIcons"
 
-import { getPriorityColor, replaceKeys1 } from "../config/helpers"
+import { formattedDate, getPriorityColor, replaceKeys1 } from "../config/helpers"
 import AddForm from "./AddForm"
 import CommentsContainer from "./CommentsContainer"
 import LabelContainer from "./LabelContainer"
@@ -445,7 +445,7 @@ const TaskDetail = () => {
                     <hr className="border text-gray-50" />
 
                     <p className="text-gray-300 py-3">Due date</p>
-                    <p className="text-xs">{dueDate}</p>
+                    <p className="text-xs">{formattedDate(dueDate)}</p>
                     <hr className="border text-gray-50" />
 
                     <PriorityContainer
