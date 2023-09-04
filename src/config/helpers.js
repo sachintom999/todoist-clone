@@ -1,59 +1,59 @@
-import { getDay, isToday, isTomorrow, addDays } from "date-fns";
-import { format } from "date-fns-tz";
-import { enUS } from "date-fns/locale/index.js"; // Replace 'enUS' with the desired locale for your app
+import { getDay, isToday, isTomorrow, addDays } from "date-fns"
+import { format } from "date-fns-tz"
+import { enUS } from "date-fns/locale/index.js" // Replace 'enUS' with the desired locale for your app
 
 export function formattedDate(
-  date = "2023-09-10T00:00:00.000Z",
-  userTimeZone = "Asia/Kolkata"
+    date = "2023-09-10T00:00:00.001Z",
+    userTimeZone = "Asia/Kolkata"
 ) {
-  const currentDate = new Date();
-  const dueDate = new Date(date);
+    const currentDate = new Date()
+    const dueDate = new Date(date)
 
-  if (isToday(dueDate)) {
-    return format(dueDate, "'Today' h:mm a", {
-      locale: enUS, // Replace with the desired locale
-      timeZone: userTimeZone,
-    });
-  } else if (isTomorrow(dueDate)) {
-    return format(dueDate, "'Tomorrow' h:mm a", {
-      locale: enUS, // Replace with the desired locale
-      timeZone: userTimeZone,
-    });
-  } else {
-    // Calculate the date 5 days from tomorrow
-    const futureDate = addDays(currentDate, 2); // Tomorrow
-    futureDate.setDate(futureDate.getDate() + 4); // 5 days from tomorrow
+    const timeFormat = dueDate.getMilliseconds() === 1 ? `` : `h:mm a`
 
-    if (dueDate >= currentDate && dueDate <= futureDate) {
-      // Display the day of the week for dates within the next 5 days after tomorrow
-      return format(dueDate, "EEEE h:mm a", {
-        locale: enUS, // Replace with the desired locale
-        timeZone: userTimeZone,
-      });
+    if (isToday(dueDate)) {
+        return format(dueDate, `'Today' ${timeFormat}`, {
+            locale: enUS, // Replace with the desired locale
+            timeZone: userTimeZone,
+        })
+    } else if (isTomorrow(dueDate)) {
+        return format(dueDate, `'Tomorrow' ${timeFormat}`, {
+            locale: enUS, // Replace with the desired locale
+            timeZone: userTimeZone,
+        })
     } else {
-      // Handle dates outside the specified range
-      return format(dueDate, "dd MMM h:mm a", {
-        timeZone: userTimeZone,
-      });
+        // Calculate the date 5 days from tomorrow
+        const futureDate = addDays(currentDate, 2) // Tomorrow
+        futureDate.setDate(futureDate.getDate() + 4) // 5 days from tomorrow
+
+        if (dueDate >= currentDate && dueDate <= futureDate) {
+            // Display the day of the week for dates within the next 5 days after tomorrow
+            return format(dueDate, `EEEE ${timeFormat}`, {
+                locale: enUS, // Replace with the desired locale
+                timeZone: userTimeZone,
+            })
+        } else {
+            // Handle dates outside the specified range
+            return format(dueDate, `dd MMM ${timeFormat}`, {
+                timeZone: userTimeZone,
+            })
+        }
     }
-  }
 }
 
-
-
-console.log( formattedDate("2023-09-04T00:00:00.000Z"))
-console.log( formattedDate("2023-09-05T00:00:00.000Z"))
-console.log( formattedDate("2023-09-06T00:00:00.000Z"))
-console.log( formattedDate("2023-09-07T00:00:00.000Z"))
-console.log( formattedDate("2023-09-08T00:00:00.000Z"))
-console.log( formattedDate("2023-09-09T00:00:00.000Z"))
-console.log( formattedDate("2023-09-10T00:00:00.000Z"))
-console.log( formattedDate("2023-09-11T00:00:00.000Z"))
-console.log( formattedDate("2023-09-12T00:00:00.000Z"))
-console.log( formattedDate("2023-09-13T00:00:00.000Z"))
+console.log(formattedDate("2023-09-04T00:00:00.001Z"))
+console.log(formattedDate("2023-09-05T00:00:00.001Z"))
+console.log(formattedDate("2023-09-06T00:00:00.001Z"))
+console.log(formattedDate("2023-09-07T00:00:00.001Z"))
+console.log(formattedDate("2023-09-08T00:00:00.001Z"))
+console.log(formattedDate("2023-09-09T00:00:00.001Z"))
+console.log(formattedDate("2023-09-10T00:00:00.001Z"))
+console.log(formattedDate("2023-09-11T00:00:00.001Z"))
+console.log(formattedDate("2023-09-12T00:00:00.001Z"))
+console.log(formattedDate("2023-09-13T00:00:00.001Z"))
 
 // Example usage:
-// const dueDate = "2023-09-12T00:00:00.000Z"; // Replace with your actual due date
+// const dueDate = "2023-09-12T00:00:00.001Z"; // Replace with your actual due date
 // const userTimeZone = 'Asia/Kolkata'; // Replace with the user's actual timezone
 
 // const humanReadableDueDate = getHumanReadableDate(dueDate, userTimeZone);
