@@ -3,10 +3,11 @@ import Task from "./Task"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { useState } from "react"
 import { useSelector } from "react-redux"
+import { formattedDate } from "../config/helpers"
 const Section = ({ title, tasks }) => {
     // console.log('tasks', tasks)
     const [formOpen, setFormOpen] = useState(false)
-    5
+    
     const { addTaskFormOpen } = useSelector(state => state.tasks)
 
     return (

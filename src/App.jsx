@@ -9,10 +9,13 @@ import AllModals from "./components/Modals/AllModals"
 import Home from "./pages/Home"
 import { fetchAllTasks } from "./redux/tasks"
 import Loading from "./components/Loading"
+import { formattedDate } from "./config/helpers"
 const App = () => {
     const { tasks, appState } = useSelector(state => state.tasks)
 
-    const dispatch = useDispatch()
+    formattedDate()
+
+    const dispatch = useDispatch() 
 
     useEffect(() => {
         dispatch(fetchAllTasks())

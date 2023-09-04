@@ -32,6 +32,8 @@ const Task = ({
     const dispatch = useDispatch()
 
     const { userSettings:{timeZone} } = useSelector(state => state.user)
+
+    console.log("-=-=-=",formattedDate())
     
 
     
