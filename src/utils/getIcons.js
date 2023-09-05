@@ -28,7 +28,7 @@ import {
     BsInbox,
     BsQuestionCircle,
 } from "react-icons/bs"
-import { FaStar,FaArrowLeft } from "react-icons/fa"
+import { FaStar,FaArrowLeft,FaArrowRight,FaArrowDown } from "react-icons/fa"
 import { FiAlertCircle } from "react-icons/fi"
 import { GoSearch } from "react-icons/go"
 import { GrHomeRounded } from "react-icons/gr"
@@ -85,6 +85,8 @@ const iconMappings = {
     arrowRight: MdKeyboardArrowRight,
     arrowLeft: MdKeyboardArrowLeft,
     arrowLeft2: FaArrowLeft,
+    arrowDown: FaArrowDown,
+    arrowRight2: FaArrowRight,
     info: BiInfoCircle,
     heartOff: LuHeartOff,
     history:BiHistory

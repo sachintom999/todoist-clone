@@ -1,35 +1,3 @@
-// import "./styles.css";
-import { useState } from "react"
-// import Calendar from "./Calendar";
-// import Details from "./Details"
-
-export default function App() {
-    const [showDetails, setShowDetails] = useState(false)
-    const [data, setData] = useState(null)
-
-    const showDetailsHandle = dayStr => {
-        setData(dayStr)
-        setShowDetails(true)
-    }
-
-    return (
-        <div className="w-screen">
-            {/* <h1>Week View Calendar with react</h1> */}
-            {/* <br /> */}
-            {/* <h2>Example</h2> */}
-            <Calendar showDetailsHandle={showDetailsHandle} />
-            {/* <br /> */}
-            {showDetails && <Details data={data} />}
-        </div>
-    )
-}
-
-/**
- * Follow this tutorial https://medium.com/@moodydev/create-a-custom-calendar-in-react-3df1bfd0b728
- * and customised by TTNT
- * date-fns doc: https://date-fns.org/v2.21.1/docs
- */
-
 import {
     addDays,
     addMonths,
@@ -42,6 +10,26 @@ import {
     subMonths,
     subWeeks,
 } from "date-fns"
+import { useState } from "react"
+import getIcon from "../utils/getIcons"
+
+export default function Sample() {
+    const [showDetails, setShowDetails] = useState(false)
+    const [data, setData] = useState(null)
+
+    const showDetailsHandle = dayStr => {
+        setData(dayStr)
+        setShowDetails(true)
+    }
+
+    return (
+        <div className="w-screen">
+            <Calendar showDetailsHandle={showDetailsHandle} />
+
+            {showDetails && <Details data={data} />}
+        </div>
+    )
+}
 
 const Calendar = ({ showDetailsHandle }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date())
@@ -58,61 +46,64 @@ const Calendar = ({ showDetailsHandle }) => {
     }
 
     const changeWeekHandle = btnType => {
-        //console.log("current week", currentWeek);
         if (btnType === "prev") {
-            //console.log(subWeeks(currentMonth, 1));
             setCurrentMonth(subWeeks(currentMonth, 1))
             setCurrentWeek(getWeek(subWeeks(currentMonth, 1)))
         }
         if (btnType === "next") {
-            //console.log(addWeeks(currentMonth, 1));
             setCurrentMonth(addWeeks(currentMonth, 1))
             setCurrentWeek(getWeek(addWeeks(currentMonth, 1)))
         }
         if (btnType === "today") {
-            //console.log(addWeeks(currentMonth, 1));
             setSelectedDate(new Date())
             setCurrentMonth(new Date())
             setCurrentWeek(getWeek(currentMonth))
+            const dayStr = format(new Date(), "ccc dd MMM yy")
+            onDateClickHandle(new Date(), dayStr)
         }
     }
 
     const onDateClickHandle = (day, dayStr) => {
+        console.log("day:::", day)
         setSelectedDate(day)
         showDetailsHandle(dayStr)
     }
 
     const renderHeader = () => {
-        const dateFormat = "MMM yyyy"
-        // console.log("selected day", selectedDate);
+        const dateFormat = "MMMM yyyy"
+
         return (
-            <div className="header row flex-middle">
-                <div className="col col-start">
-                    {/* <div className="icon" onClick={() => changeMonthHandle("prev")}>
-            prev month
-          </div> */}
-                </div>
-                <div className="col col-center">
-                    <span>{format(currentMonth, dateFormat)}</span>
-                </div>
-                <div className="col col-end">
-                    {/* <div className="icon" onClick={() => changeMonthHandle("next")}>next month</div> */}
+            <div className="flex justify-between items-center ">
+                <span className="font-bold text-sm">
+                    {format(currentMonth, dateFormat)}
+                    {/* {getIcon("arrowDown")} */}
+                </span>
+
+                <div className="flex">
+                    <div className="flex items-center rounded-md  border border-gray-400 mr-4">
+                        <div
+                            className=" px-1 cursor-pointer text-center border-r"
+                            onClick={() => changeWeekHandle("prev")}
+                        >
+                            {getIcon("arrowLeft")}
+                        </div>
+
+                        <div onClick={() => changeWeekHandle("next")}>
+                            <div className=" px-1 cursor-pointer text-center">
+                                {getIcon("arrowRight")}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="border text-xs px-2 py-1 rounded-md cursor-pointer"
+                        onClick={() => changeWeekHandle("today")}
+                    >
+                        Today
+                    </div>
                 </div>
             </div>
         )
-    }
-    const renderDays = () => {
-        const dateFormat = "EEE"
-        const days = []
-        let startDate = startOfWeek(currentMonth, { weekStartsOn: 1 })
-        for (let i = 0; i < 7; i++) {
-            days.push(
-                <div className="col col-center bg-blue-200 p-2 border border-green-400" key={i}>
-                    {format(addDays(startDate, i), dateFormat)}
-                </div>
-            )
-        }
-        return <div className="flex bg-red-200">{days}</div>
     }
     const renderCells = () => {
         const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 })
@@ -143,28 +134,40 @@ const Calendar = ({ showDetailsHandle }) => {
                             onDateClickHandle(cloneDay, dayStr)
                         }}
                     >
-                        <span className="number text-yellow-600 p-2">{formattedDate} {format(day,"EEE")} </span>
-                        {/* <span className="bg">{formattedDate}</span> */}
+                        <div className=" text-gray-600 px-6 flex flex-col justify-center items-center mt-2  w-full">
+                            <p className="text-xs text-gray-200">
+                                {format(day, "EEE")}
+                            </p>
+                            <p className="text-xl">{formattedDate}</p>
+
+                            {isSameDay(day, selectedDate) ? (
+                                <span className="text-red-400 font-bold">
+                                    *
+                                </span>
+                            ) : (
+                                <span></span>
+                            )}
+                        </div>
                     </div>
                 )
                 day = addDays(day, 1)
             }
 
             rows.push(
-                <div className="flex" key={day}>
+                <div className="flex w-full justify-evenly" key={day}>
                     {days}
                 </div>
             )
             days = []
         }
-        return <div className="body">{rows}</div>
+        return <div className="w-full">{rows}</div>
     }
     const renderFooter = () => {
         return (
             <div className="header row flex">
                 <div className="col col-start">
                     <div
-                        className="bg-pink-100 p-2"
+                        className=" p-2"
                         onClick={() => changeWeekHandle("prev")}
                     >
                         prev
@@ -175,33 +178,27 @@ const Calendar = ({ showDetailsHandle }) => {
                     className="col col-end"
                     onClick={() => changeWeekHandle("next")}
                 >
-                    <div className="bg-pink-100 p-2">next </div>
+                    <div className=" p-2">next </div>
                 </div>
-                <div className="text-green-600" onClick={() => changeWeekHandle("today")}  >Today</div>
+                <div
+                    className="text-green-600"
+                    onClick={() => changeWeekHandle("today")}
+                >
+                    Today
+                </div>
             </div>
         )
     }
     return (
-        <div className="calendar">
+        <div className="p-4">
             {renderHeader()}
-            {renderFooter()}
-            {/* {renderDays()} */}
+            {/* {renderFooter()} */}
+
             {renderCells()}
         </div>
     )
 }
 
-/**
- * Header:
- * icon for switching to the previous month,
- * formatted date showing current month and year,
- * another icon for switching to next month
- * icons should also handle onClick events to change a month
- */
-
-
-const Details = (props) => {
-  return <div>{props.data}</div>;
-};
-
-
+const Details = props => {
+    return <div className="text-red-700 bg-yellow-200">{props.data}</div>
+}
