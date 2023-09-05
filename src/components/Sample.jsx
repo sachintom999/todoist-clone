@@ -69,6 +69,12 @@ const Calendar = ({ showDetailsHandle }) => {
             setCurrentMonth(addWeeks(currentMonth, 1))
             setCurrentWeek(getWeek(addWeeks(currentMonth, 1)))
         }
+        if (btnType === "today") {
+            //console.log(addWeeks(currentMonth, 1));
+            setSelectedDate(new Date())
+            setCurrentMonth(new Date())
+            setCurrentWeek(getWeek(currentMonth))
+        }
     }
 
     const onDateClickHandle = (day, dayStr) => {
@@ -101,12 +107,12 @@ const Calendar = ({ showDetailsHandle }) => {
         let startDate = startOfWeek(currentMonth, { weekStartsOn: 1 })
         for (let i = 0; i < 7; i++) {
             days.push(
-                <div className="col col-center" key={i}>
+                <div className="col col-center bg-blue-200 p-2 border border-green-400" key={i}>
                     {format(addDays(startDate, i), dateFormat)}
                 </div>
             )
         }
-        return <div className="days row">{days}</div>
+        return <div className="flex bg-red-200">{days}</div>
     }
     const renderCells = () => {
         const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 })
@@ -115,10 +121,12 @@ const Calendar = ({ showDetailsHandle }) => {
         const rows = []
         let days = []
         let day = startDate
+        let dayy
         let formattedDate = ""
         while (day <= endDate) {
             for (let i = 0; i < 7; i++) {
                 formattedDate = format(day, dateFormat)
+                dayy = format
                 const cloneDay = day
                 days.push(
                     <div
@@ -135,15 +143,15 @@ const Calendar = ({ showDetailsHandle }) => {
                             onDateClickHandle(cloneDay, dayStr)
                         }}
                     >
-                        <span className="number">{formattedDate}</span>
-                        <span className="bg">{formattedDate}</span>
+                        <span className="number text-yellow-600 p-2">{formattedDate} {format(day,"EEE")} </span>
+                        {/* <span className="bg">{formattedDate}</span> */}
                     </div>
                 )
                 day = addDays(day, 1)
             }
 
             rows.push(
-                <div className="row" key={day}>
+                <div className="flex" key={day}>
                     {days}
                 </div>
             )
@@ -153,13 +161,13 @@ const Calendar = ({ showDetailsHandle }) => {
     }
     const renderFooter = () => {
         return (
-            <div className="header row flex-middle">
+            <div className="header row flex">
                 <div className="col col-start">
                     <div
-                        className="icon"
+                        className="bg-pink-100 p-2"
                         onClick={() => changeWeekHandle("prev")}
                     >
-                        prev week
+                        prev
                     </div>
                 </div>
                 <div>{currentWeek}</div>
@@ -167,17 +175,18 @@ const Calendar = ({ showDetailsHandle }) => {
                     className="col col-end"
                     onClick={() => changeWeekHandle("next")}
                 >
-                    <div className="icon">next week</div>
+                    <div className="bg-pink-100 p-2">next </div>
                 </div>
+                <div className="text-green-600" onClick={() => changeWeekHandle("today")}  >Today</div>
             </div>
         )
     }
     return (
         <div className="calendar">
             {renderHeader()}
-            {renderDays()}
-            {renderCells()}
             {renderFooter()}
+            {/* {renderDays()} */}
+            {renderCells()}
         </div>
     )
 }
