@@ -4,10 +4,11 @@ import Task from "../components/Task"
 import { useEffect, useState } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import {
     getInboxTasks,
     getProjectTasks,
+    getTodayTasks,
     moveTask,
     reorderSectionTasks,
 } from "../redux/tasks"
@@ -21,7 +22,10 @@ import {
 
 const Main = ({ title, taskList }) => {
     const { projectId } = useParams()
+    const location = useLocation()
     const dispatch = useDispatch()
+
+    console.log("location...", location)
 
     const { taskDetailOpen, pageTasks } = useSelector(state => state.tasks)
 
@@ -33,8 +37,11 @@ const Main = ({ title, taskList }) => {
             dispatch(getProjectTasks(projectId))
             console.log("51")
         } else {
-            console.log("53")
-            dispatch(getInboxTasks())
+            if (location.pathname === "/today") {
+                dispatch(getTodayTasks())
+            } else {
+                dispatch(getInboxTasks())
+            }
         }
 
         const sectionsData = pageTasks?.sections
@@ -107,7 +114,7 @@ const Main = ({ title, taskList }) => {
                 origSectionId: source.droppableId,
                 newSectionId: destination.droppableId,
                 origIndex: source.index,
-                newIndex : destination.index,
+                newIndex: destination.index,
             }
 
             dispatch(moveTask(payload))

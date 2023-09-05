@@ -181,50 +181,6 @@ export const tasksSlice = createSlice({
         updatecreateEditLabelModal: (state, action) => {
             state.createEditLabelModal = action.payload
         },
-
-        getTodayTasks: (state, action) => {
-            const allTasks = action.payload
-
-            state.todaySections = []
-
-            // const overDueTasks = []
-            // const todayTasks = []
-
-            const currentDate = new Date().toISOString().split("T")[0] // Get current date in YYYY-MM-DD format
-
-            const todaysTasks = allTasks.filter(
-                task =>
-                    !task.completed &&
-                    task.dueDate?.split("T")[0] === currentDate
-            )
-
-            console.log("todaysTasks", todaysTasks)
-
-            const overdueTasks = allTasks.filter(
-                task =>
-                    !task.completed && task.dueDate?.split("T")[0] < currentDate
-            )
-
-            if (overdueTasks.length > 0)
-                state.todaySections = [
-                    ...state.todaySections,
-                    { name: "Overdue", tasks: overdueTasks },
-                ]
-            if (todaysTasks.length > 0)
-                state.todaySections = [
-                    ...state.todaySections,
-                    { name: "Today", tasks: todaysTasks },
-                ]
-
-            // state.todaySections = [
-            //     { name: "Overdue", tasks: overdueTasks, },
-
-            //     {
-            //         name: "Today",
-            //         tasks: todaysTasks,
-            //     },
-            // ]
-        },
     },
     extraReducers: builder => {
         builder.addCase(fetchAllTasks.fulfilled, (state, action) => {
@@ -240,7 +196,16 @@ export const tasksSlice = createSlice({
         builder.addCase(getProjectTasks.fulfilled, (state, action) => {
             // console.log(" getProjectTasks >> action.payload", action.payload)
 
-            const transformedData = replaceKeys(action.payload)
+            replaceKeys(action.payload)
+
+            // console.log('transformedData', transformedData)
+
+            state.pageTasks = replaceKeys(action.payload)
+        })
+        builder.addCase(getTodayTasks.fulfilled, (state, action) => {
+            // console.log(" getProjectTasks >> action.payload", action.payload)
+
+            
 
             // console.log('transformedData', transformedData)
 
@@ -287,6 +252,18 @@ export const fetchAllTasks = createAsyncThunk(
     "tasks/fetchAllTasks",
     async () => {
         const response = await axios.get("http://localhost:3000/api/tasks")
+        return response.data
+    }
+)
+
+
+export const getTodayTasks = createAsyncThunk(
+    "tasks/getTodayTasks",
+    async () => {
+        const response = await axios.get(
+            "http://localhost:3000/api/projects/today-tasks"
+        )
+
         return response.data
     }
 )
@@ -370,7 +347,7 @@ export const moveTask = createAsyncThunk("tasks/moveTask", async payload => {
         `http://localhost:3000/api/tasks/moveTask`,
         payload
     )
-    console.log('reponse.data', reponse.data)
+    console.log("reponse.data", reponse.data)
 
     return response.data
 })
@@ -464,7 +441,7 @@ export const {
     completeTask,
     filterTasks,
     getAllTasks,
-    getTodayTasks,
+
     reset,
     decrement,
     openAddTaskForm,

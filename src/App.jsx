@@ -13,7 +13,7 @@ import { formattedDate } from "./config/helpers"
 const App = () => {
     const { tasks, appState } = useSelector(state => state.tasks)
 
-    formattedDate()
+    // formattedDate()
 
     const dispatch = useDispatch() 
 

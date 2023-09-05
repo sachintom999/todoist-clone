@@ -4,6 +4,7 @@ import { MdOutlineAddReaction } from "react-icons/md"
 import { useDispatch } from "react-redux"
 import { updateComment } from "../redux/tasks"
 import Reaction from "./Comment/Reaction"
+import { formattedDate } from "../config/helpers"
 const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const dispatch = useDispatch()
@@ -25,7 +26,7 @@ const Comment = ({ comment: { text, reactions, createdAt, user, _id } }) => {
                                 {user?.firstName} {user?.lastName}
                             </span>
                             <span className="text-xs ml-3 text-gray-400">
-                                {createdAt}
+                                {formattedDate(createdAt)}
                             </span>
                         </span>
                         <span className="inline">
