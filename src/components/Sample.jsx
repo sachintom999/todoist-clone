@@ -1,42 +1,198 @@
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+// import "./styles.css";
+import { useState } from "react"
+// import Calendar from "./Calendar";
+// import Details from "./Details"
 
-const WeekCalendar = () => {
-  const [date, setDate] = useState(new Date());
+export default function App() {
+    const [showDetails, setShowDetails] = useState(false)
+    const [data, setData] = useState(null)
 
-  // Calculate the start and end dates of the week (from Monday to Sunday)
-  const startDate = new Date(date);
-  startDate.setDate(startDate.getDate() - startDate.getDay() + 1); // Monday of the current week
-  const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 6); // Sunday of the current week
-
-  // Function to check if a date is within the current week
-  const isDateInCurrentWeek = (dateToCheck) => {
-    return dateToCheck >= startDate && dateToCheck <= endDate;
-  };
-
-  // Render custom content for day tiles
-  const tileContent = ({ date, view }) => {
-    if (view === 'month' && isDateInCurrentWeek(date)) {
-      return <div className="day-tile">{date.getDate()}</div>;
+    const showDetailsHandle = dayStr => {
+        setData(dayStr)
+        setShowDetails(true)
     }
-    return null;
-  };
 
-  return (
-    <div>
-      <div className="week-header">
-        {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
-      </div>
-      <Calendar
-        onChange={setDate}
-        value={date}
-        tileContent={tileContent}
-        calendarType="US" // Set calendar type to US for Sunday as the first day of the week
-      />
-    </div>
-  );
+    return (
+        <div className="w-screen">
+            {/* <h1>Week View Calendar with react</h1> */}
+            {/* <br /> */}
+            {/* <h2>Example</h2> */}
+            <Calendar showDetailsHandle={showDetailsHandle} />
+            {/* <br /> */}
+            {showDetails && <Details data={data} />}
+        </div>
+    )
+}
+
+/**
+ * Follow this tutorial https://medium.com/@moodydev/create-a-custom-calendar-in-react-3df1bfd0b728
+ * and customised by TTNT
+ * date-fns doc: https://date-fns.org/v2.21.1/docs
+ */
+
+import {
+    addDays,
+    addMonths,
+    addWeeks,
+    format,
+    getWeek,
+    isSameDay,
+    lastDayOfWeek,
+    startOfWeek,
+    subMonths,
+    subWeeks,
+} from "date-fns"
+
+const Calendar = ({ showDetailsHandle }) => {
+    const [currentMonth, setCurrentMonth] = useState(new Date())
+    const [currentWeek, setCurrentWeek] = useState(getWeek(currentMonth))
+    const [selectedDate, setSelectedDate] = useState(new Date())
+
+    const changeMonthHandle = btnType => {
+        if (btnType === "prev") {
+            setCurrentMonth(subMonths(currentMonth, 1))
+        }
+        if (btnType === "next") {
+            setCurrentMonth(addMonths(currentMonth, 1))
+        }
+    }
+
+    const changeWeekHandle = btnType => {
+        //console.log("current week", currentWeek);
+        if (btnType === "prev") {
+            //console.log(subWeeks(currentMonth, 1));
+            setCurrentMonth(subWeeks(currentMonth, 1))
+            setCurrentWeek(getWeek(subWeeks(currentMonth, 1)))
+        }
+        if (btnType === "next") {
+            //console.log(addWeeks(currentMonth, 1));
+            setCurrentMonth(addWeeks(currentMonth, 1))
+            setCurrentWeek(getWeek(addWeeks(currentMonth, 1)))
+        }
+    }
+
+    const onDateClickHandle = (day, dayStr) => {
+        setSelectedDate(day)
+        showDetailsHandle(dayStr)
+    }
+
+    const renderHeader = () => {
+        const dateFormat = "MMM yyyy"
+        // console.log("selected day", selectedDate);
+        return (
+            <div className="header row flex-middle">
+                <div className="col col-start">
+                    {/* <div className="icon" onClick={() => changeMonthHandle("prev")}>
+            prev month
+          </div> */}
+                </div>
+                <div className="col col-center">
+                    <span>{format(currentMonth, dateFormat)}</span>
+                </div>
+                <div className="col col-end">
+                    {/* <div className="icon" onClick={() => changeMonthHandle("next")}>next month</div> */}
+                </div>
+            </div>
+        )
+    }
+    const renderDays = () => {
+        const dateFormat = "EEE"
+        const days = []
+        let startDate = startOfWeek(currentMonth, { weekStartsOn: 1 })
+        for (let i = 0; i < 7; i++) {
+            days.push(
+                <div className="col col-center" key={i}>
+                    {format(addDays(startDate, i), dateFormat)}
+                </div>
+            )
+        }
+        return <div className="days row">{days}</div>
+    }
+    const renderCells = () => {
+        const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 })
+        const endDate = lastDayOfWeek(currentMonth, { weekStartsOn: 1 })
+        const dateFormat = "d"
+        const rows = []
+        let days = []
+        let day = startDate
+        let formattedDate = ""
+        while (day <= endDate) {
+            for (let i = 0; i < 7; i++) {
+                formattedDate = format(day, dateFormat)
+                const cloneDay = day
+                days.push(
+                    <div
+                        className={`col cell ${
+                            isSameDay(day, new Date())
+                                ? "today"
+                                : isSameDay(day, selectedDate)
+                                ? "selected"
+                                : ""
+                        }`}
+                        key={day}
+                        onClick={() => {
+                            const dayStr = format(cloneDay, "ccc dd MMM yy")
+                            onDateClickHandle(cloneDay, dayStr)
+                        }}
+                    >
+                        <span className="number">{formattedDate}</span>
+                        <span className="bg">{formattedDate}</span>
+                    </div>
+                )
+                day = addDays(day, 1)
+            }
+
+            rows.push(
+                <div className="row" key={day}>
+                    {days}
+                </div>
+            )
+            days = []
+        }
+        return <div className="body">{rows}</div>
+    }
+    const renderFooter = () => {
+        return (
+            <div className="header row flex-middle">
+                <div className="col col-start">
+                    <div
+                        className="icon"
+                        onClick={() => changeWeekHandle("prev")}
+                    >
+                        prev week
+                    </div>
+                </div>
+                <div>{currentWeek}</div>
+                <div
+                    className="col col-end"
+                    onClick={() => changeWeekHandle("next")}
+                >
+                    <div className="icon">next week</div>
+                </div>
+            </div>
+        )
+    }
+    return (
+        <div className="calendar">
+            {renderHeader()}
+            {renderDays()}
+            {renderCells()}
+            {renderFooter()}
+        </div>
+    )
+}
+
+/**
+ * Header:
+ * icon for switching to the previous month,
+ * formatted date showing current month and year,
+ * another icon for switching to next month
+ * icons should also handle onClick events to change a month
+ */
+
+
+const Details = (props) => {
+  return <div>{props.data}</div>;
 };
 
-export default WeekCalendar;
+

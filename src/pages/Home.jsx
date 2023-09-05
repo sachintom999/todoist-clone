@@ -10,6 +10,7 @@ import AddProject from "../components/Modals/AddProject"
 import UpcomingNew from "./UpcomingNew"
 import Sample from '../components/Sample'
 import { ToastContainer } from "react-toastify"
+import RealUpcoming from "./RealUpcoming"
 
 const Home = () => {
     const { taskList } = useSelector(state => state.tasks)
@@ -33,7 +34,8 @@ const Home = () => {
                     element={<Main title="PROJ-NAME" />}
                 />
                 <Route path="/label/:labelId" element={<LabelTasks />} />
-                <Route path="/upcoming" element={<Upcoming />} />
+                {/* <Route path="/upcoming" element={<Upcoming />} /> */}
+                <Route path="/upcoming" element={<RealUpcoming/>} />
                 <Route path="/filters-labels" element={<Filters />} />
                 <Route path="/sample" element={<Sample />} />
             </Routes>
