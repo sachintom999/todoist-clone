@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 
-
 import { AiOutlineBranches } from "react-icons/ai"
 import { BiComment } from "react-icons/bi"
 import { BsCalendar3 } from "react-icons/bs"
+import { formattedDate } from "../config/helpers"
 import {
     completeTask,
     fetchTaskDetail,
@@ -11,7 +11,6 @@ import {
     updatedeleteConfirmationModal,
 } from "../redux/tasks"
 import LabelList from "./LabelList"
-import { formattedDate } from "../config/helpers"
 
 const Task = ({
     task: {
@@ -31,14 +30,11 @@ const Task = ({
 }) => {
     const dispatch = useDispatch()
 
-    const { userSettings:{timeZone} } = useSelector(state => state.user)
+    const {
+        userSettings: { timeZone },
+    } = useSelector(state => state.user)
 
-    console.log("-=-=-=",formattedDate())
-    
-
-    
-
-    
+    console.log("-=-=-=", formattedDate())
 
     const priorityClass = {
         1: "border-red-700",
@@ -70,7 +66,6 @@ const Task = ({
         <div
             className="bg-dark1 p-3 mt-4 mb-4 cursor-pointer rounded-md border-solid border-slate-700 shadow-gray-700 shadow-sm border text-slate-400 w-48"
             onClick={() => {
-                console.log("first")
                 dispatch(fetchTaskDetail(_id)).then(() => {
                     dispatch(openTaskDetailForm(_id))
                 })
@@ -137,8 +132,7 @@ const Task = ({
                 </span>
                 <span className={timeClassName}>
                     <BsCalendar3 fontSize={10} className="inline" />{" "}
-                    {formattedDate(dueDate,timeZone)}
-                    
+                    {formattedDate(dueDate, timeZone)}
                 </span>
                 <span>{project?.name}</span>
                 {section?.name && <span>/{section?.name}</span>}

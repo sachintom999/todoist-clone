@@ -388,6 +388,36 @@ const getTodayTasks = async (req, res) => {
 //     }
 // }
 
+const searchTask = async (req, res) => {
+    const { searchTerm } = req.params
+    console.log("393", searchTerm)
+
+    try {
+        const tasks = await Task.find({
+            $or: [
+                { title: { $regex: searchTerm, $options: "i" } },
+                { desc: { $regex: searchTerm, $options: "i" } },
+            ],
+        }).populate('project')
+        const projects = await Project.find({
+            $or: [{ name: { $regex: searchTerm, $options: "i" } }],
+        })
+        const sections = await Section.find({
+            $or: [{ name: { $regex: searchTerm, $options: "i" } }],
+        }).populate('project')
+        const labels = await Label.find({
+            $or: [{ name: { $regex: searchTerm, $options: "i" } }],
+        })
+
+        const result = { projects, sections, labels, tasks }
+
+        return res.status(200).json(result)
+    } catch (error) {
+        console.error(" taskController  error at line 397 ::", error)
+        return res.status(500).json(error)
+    }
+}
+
 module.exports = {
     createTask,
     getAllTasks,
@@ -398,5 +428,6 @@ module.exports = {
     reorderSubTasks,
     reorderSectionTasks,
     moveTask,
+    searchTask,
     // getInboxTasks,
 }

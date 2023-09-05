@@ -8,6 +8,7 @@ import Upcoming from "../components/Upcoming"
 import LabelTasks from "../components/LabelTasks"
 import AddProject from "../components/Modals/AddProject"
 import UpcomingNew from "./UpcomingNew"
+import Sample from '../components/Sample'
 import { ToastContainer } from "react-toastify"
 
 const Home = () => {
@@ -34,6 +35,7 @@ const Home = () => {
                 <Route path="/label/:labelId" element={<LabelTasks />} />
                 <Route path="/upcoming" element={<Upcoming />} />
                 <Route path="/filters-labels" element={<Filters />} />
+                <Route path="/sample" element={<Sample />} />
             </Routes>
 
         </div>

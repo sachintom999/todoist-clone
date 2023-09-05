@@ -34,16 +34,16 @@ const App = () => {
                     <AllModals />
 
                     <div className="flex flex-col relative">
+                            <Router>
                         <Topbar />
 
                         <div className="flex flex-1">
-                            <Router>
                                 {/* <GlobalKeyboardShortcuts /> */}
                                 <Sidebar />
 
                                 <Home />
-                            </Router>
                         </div>
+                            </Router>
 
                         <div className="absolute  bg-red-200 bottom-16 left-10 text-xs w-64 px-2 py-1 flex justify-center items-center rounded-md">
                             <ToastContainer

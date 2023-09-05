@@ -25,8 +25,6 @@ const Main = ({ title, taskList }) => {
     const location = useLocation()
     const dispatch = useDispatch()
 
-    console.log("location...", location)
-
     const { taskDetailOpen, pageTasks } = useSelector(state => state.tasks)
 
     const [lists, setLists] = useState([])
@@ -35,7 +33,6 @@ const Main = ({ title, taskList }) => {
     useEffect(() => {
         if (projectId) {
             dispatch(getProjectTasks(projectId))
-            console.log("51")
         } else {
             if (location.pathname === "/today") {
                 dispatch(getTodayTasks())
@@ -46,7 +43,6 @@ const Main = ({ title, taskList }) => {
 
         const sectionsData = pageTasks?.sections
         setLists(replaceKeys1(sectionsData))
-        console.log("....", replaceKeys1(sectionsData))
     }, [projectId])
 
     const onDragEnd = result => {
@@ -145,6 +141,7 @@ const Main = ({ title, taskList }) => {
                                     // console.log("lists", lists)
                                     return (
                                         <div
+                                            id={`section-${section.id}`}
                                             ref={provided.innerRef}
                                             style={getListStyle(
                                                 snapshot.isDraggingOver

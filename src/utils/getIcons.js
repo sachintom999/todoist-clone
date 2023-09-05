@@ -15,6 +15,7 @@ import {
     BiComment,
     BiInfoCircle,
     BiSolidUserCircle,
+    BiHistory
 } from "react-icons/bi"
 import {
     BsCalendar3,
@@ -86,6 +87,7 @@ const iconMappings = {
     arrowLeft2: FaArrowLeft,
     info: BiInfoCircle,
     heartOff: LuHeartOff,
+    history:BiHistory
     // Add more mappings here
 }
 

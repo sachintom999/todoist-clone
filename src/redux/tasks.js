@@ -33,6 +33,7 @@ export const tasksSlice = createSlice({
         },
 
         labelTasks: {},
+        searchResults: [],
 
         deleteConfirmationModal: {
             show: false,
@@ -187,6 +188,11 @@ export const tasksSlice = createSlice({
             state.taskList = action.payload
             state.appState.loading = false
         })
+        builder.addCase(searchTasks.fulfilled, (state, action) => {
+            
+            state.searchResults = action.payload
+        })
+
         builder.addCase(reorderSubtasks.fulfilled, (state, action) => {
             // state.taskDetailModalContents
         })
@@ -204,8 +210,6 @@ export const tasksSlice = createSlice({
         })
         builder.addCase(getTodayTasks.fulfilled, (state, action) => {
             // console.log(" getProjectTasks >> action.payload", action.payload)
-
-            
 
             // console.log('transformedData', transformedData)
 
@@ -255,7 +259,20 @@ export const fetchAllTasks = createAsyncThunk(
         return response.data
     }
 )
+export const searchTasks = createAsyncThunk(
+    "tasks/searchTasks",
+    async searchTerm => {
 
+
+        console.log('searchTerm', searchTerm)
+        console.log('searchTerm', searchTerm)
+        const response = await axios.get(
+            // `http://localhost:3000/api/tasks/search/${searchTerm}`
+            `http://localhost:3000/api/tasks/search/${searchTerm}`
+        )
+        return response.data
+    }
+)
 
 export const getTodayTasks = createAsyncThunk(
     "tasks/getTodayTasks",
