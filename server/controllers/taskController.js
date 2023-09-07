@@ -37,14 +37,25 @@ const createTask = async (req, res) => {
 const getAllTasks = async (req, res) => {
     console.log("31")
     const query = req.query
-    console.log("query", query)
+    const { startDate, endDate } = req.query
+    let tasks
 
-    const tasks = await Task.find()
-        .sort({ createdAt: -1 })
-        .populate("subtasks")
-        .populate("project")
-        .populate("section")
-        .populate("labels")
+    if (startDate && endDate) {
+        console.log("45")
+        const startDateObj = new Date(startDate);
+        const endDateObj = new Date(endDate);
+
+        tasks = await Task.find({
+            dueDate: { $gte: startDateObj, $lte: endDateObj },
+        })
+    } else {
+        tasks = await Task.find()
+            .sort({ createdAt: -1 })
+            .populate("subtasks")
+            .populate("project")
+            .populate("section")
+            .populate("labels")
+    }
 
     const tasksWithSubtaskCounts = tasks.map(task => {
         const subtasks = task?.subtasks || []
@@ -398,13 +409,13 @@ const searchTask = async (req, res) => {
                 { title: { $regex: searchTerm, $options: "i" } },
                 { desc: { $regex: searchTerm, $options: "i" } },
             ],
-        }).populate('project')
+        }).populate("project")
         const projects = await Project.find({
             $or: [{ name: { $regex: searchTerm, $options: "i" } }],
         })
         const sections = await Section.find({
             $or: [{ name: { $regex: searchTerm, $options: "i" } }],
-        }).populate('project')
+        }).populate("project")
         const labels = await Label.find({
             $or: [{ name: { $regex: searchTerm, $options: "i" } }],
         })
@@ -415,6 +426,26 @@ const searchTask = async (req, res) => {
     } catch (error) {
         console.error(" taskController  error at line 397 ::", error)
         return res.status(500).json(error)
+    }
+}
+
+const getTasksBetweenDates = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query // Assuming you pass start and end dates as query parameters
+
+        // Parse the start and end dates into JavaScript Date objects
+        const startDateObj = new Date(startDate)
+        const endDateObj = new Date(endDate)
+
+        // Query tasks with due dates between the start and end dates
+        const tasks = await Task.find({
+            dueDate: { $gte: startDateObj, $lte: endDateObj },
+        })
+
+        res.json(tasks)
+    } catch (error) {
+        console.error("Error retrieving tasks:", error)
+        res.status(500).json({ error: "Internal server error" })
     }
 }
 
@@ -429,5 +460,6 @@ module.exports = {
     reorderSectionTasks,
     moveTask,
     searchTask,
+    getTasksBetweenDates,
     // getInboxTasks,
 }
