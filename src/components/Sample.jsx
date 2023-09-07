@@ -26,7 +26,7 @@ export default function Sample() {
         <div className="w-screen">
             <Calendar showDetailsHandle={showDetailsHandle} />
 
-            {showDetails && <Details data={data} />}
+            {/* {showDetails && <Details data={data} />} */}
         </div>
     )
 }
@@ -134,19 +134,17 @@ const Calendar = ({ showDetailsHandle }) => {
                             onDateClickHandle(cloneDay, dayStr)
                         }}
                     >
-                        <div className=" text-gray-600 px-6 flex flex-col justify-center items-center mt-2  w-full">
+                        <div
+                            className={` text-gray-600 px-6 flex flex-col justify-center items-center mt-2  w-full cursor-pointer  ${
+                                isSameDay(day, selectedDate)
+                                    ? "border-b border-red-500 "
+                                    : ""
+                            }  `}
+                        >
                             <p className="text-xs text-gray-200">
                                 {format(day, "EEE")}
                             </p>
                             <p className="text-xl">{formattedDate}</p>
-
-                            {isSameDay(day, selectedDate) ? (
-                                <span className="text-red-400 font-bold">
-                                    *
-                                </span>
-                            ) : (
-                                <span></span>
-                            )}
                         </div>
                     </div>
                 )
