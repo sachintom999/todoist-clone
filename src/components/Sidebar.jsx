@@ -31,7 +31,7 @@ const Sidebar = () => {
     }
 
     return (
-        <div className="w-2/12 flex-1  bg-dark3 text-gray-100  px-3 py-5  flex flex-col">
+        <div className="w-[217px] flex-1  bg-dark3 text-gray-100  px-3 py-5  flex flex-col">
             {sideBarOptions.map(item => {
                 return (
                     <NavLink

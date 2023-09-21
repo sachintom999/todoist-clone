@@ -1,5 +1,6 @@
+import { IoMdPricetag } from "react-icons/io"
 import { useNavigate } from "react-router-dom"
-import { AiOutlineTag } from "react-icons/ai"
+
 import getIcon from "../../utils/getIcons"
 const SidebarItem = ({ item, itemType }) => {
     const navigate = useNavigate()
@@ -14,9 +15,9 @@ const SidebarItem = ({ item, itemType }) => {
             )
         }
         return (
-            <AiOutlineTag
-                fontSize={12}
-                className="text-gray-400 mr-2"
+            <IoMdPricetag
+                fontSize={18}
+                className="text-gray-400 mr-2 rotate-270"
                 style={{ color: item?.color }}
             />
         )

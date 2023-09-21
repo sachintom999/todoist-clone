@@ -188,7 +188,7 @@ const Calendar = ({ showDetailsHandle }) => {
         )
     }
     return (
-        <div className="p-4">
+        <div className="">
             {renderHeader()}
             {/* {renderFooter()} */}
 
